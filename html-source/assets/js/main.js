@@ -29,10 +29,21 @@ Js TABLE OF CONTENTS
 
 ------------------------------------------------------------------*/
 
+// Soft stub before any plugin init: Extech uses Swiper, not Owl Carousel.
+(function (jq) {
+    if (!jq || typeof jq.fn !== "object") {
+        return;
+    }
+    if (typeof jq.fn.owlCarousel !== "function") {
+        jq.fn.owlCarousel = function () {
+            return this;
+        };
+    }
+})(window.jQuery || window.$);
+
 (function ($) {
     "use strict";
 
-    // Soft stub: some cached/old scripts call owlCarousel; Extech uses Swiper instead.
     if (typeof $.fn.owlCarousel !== "function") {
         $.fn.owlCarousel = function () {
             return this;
