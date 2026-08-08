@@ -73,7 +73,17 @@ class ManageSiteSettings extends Page
                                     ->schema([
                                         TextInput::make('site_name')->required()->maxLength(120),
                                         TextInput::make('tagline')->maxLength(255),
-                                        TextInput::make('preloader_text')->maxLength(20)->helperText('Letters shown in preloader'),
+                                        TextInput::make('preloader_text')->maxLength(20)->helperText('Letters shown when GIF not uploaded'),
+                                        FileUpload::make('preloader_gif')
+                                            ->label('Preloader GIF / Image')
+                                            ->image()
+                                            ->acceptedFileTypes(['image/gif', 'image/png', 'image/webp', 'image/jpeg', 'image/svg+xml'])
+                                            ->directory('preloaders')
+                                            ->disk('public')
+                                            ->helperText('Upload GIF/PNG — ye preloader letters ki jagah dikhega'),
+                                        TextInput::make('preloader_loading_text')
+                                            ->label('Preloader Loading Text')
+                                            ->default('Loading'),
                                         FileUpload::make('logo')->image()->directory('brand')->disk('public'),
                                         FileUpload::make('logo_white')->image()->directory('brand')->disk('public'),
                                         FileUpload::make('favicon')->image()->directory('brand')->disk('public'),
@@ -164,7 +174,7 @@ class ManageSiteSettings extends Page
                         Tab::make('Home 2 Content')
                             ->schema(self::homeContentFields('home_2_content')),
                         Tab::make('Home 3 Content')
-                            ->schema(self::homeContentFields('home_3_content')),
+                            ->schema(self::home3ContentFields()),
                         Tab::make('Global SEO')
                             ->schema([
                                 SeoForm::section(),
@@ -176,6 +186,110 @@ class ManageSiteSettings extends Page
                             ]),
                     ]),
             ]);
+    }
+
+    /**
+     * @return array<int, \Filament\Schemas\Components\Component>
+     */
+    protected static function home3ContentFields(): array
+    {
+        $p = 'home_3_content';
+
+        return [
+            Section::make('Hero Slider Slides')
+                ->schema([
+                    Repeater::make("{$p}.hero_slides")
+                        ->label('Slides')
+                        ->collapsible()
+                        ->defaultItems(0)
+                        ->schema([
+                            FileUpload::make('image')->label('Background Image')->image()->directory('home/slides')->disk('public')->required(),
+                            TextInput::make('subtitle')->default('best it company'),
+                            TextInput::make('title')->required()->columnSpanFull(),
+                            Textarea::make('text')->rows(2)->columnSpanFull(),
+                            TextInput::make('btn1_text')->label('Button 1 Text')->default('Explore More'),
+                            TextInput::make('btn1_url')->label('Button 1 URL')->default('/about'),
+                            TextInput::make('btn2_text')->label('Button 2 Text')->default('Contact Us'),
+                            TextInput::make('btn2_url')->label('Button 2 URL')->default('/contact'),
+                        ])
+                        ->columns(2),
+                ]),
+            Section::make('About Section')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.about_subtitle")->default('ABOUT EXTECH'),
+                    TextInput::make("{$p}.about_title")->columnSpanFull(),
+                    Textarea::make("{$p}.about_text")->rows(3)->columnSpanFull(),
+                    FileUpload::make("{$p}.about_image")->image()->directory('home')->disk('public'),
+                    TextInput::make("{$p}.about_video_url")->label('Video URL'),
+                    TextInput::make("{$p}.about_clients_count")->label('Clients Count')->default('6,561'),
+                    TextInput::make("{$p}.about_clients_label")->label('Clients Label')->default('Satisfied Clients'),
+                    TextInput::make("{$p}.about_phone")->label('Call Us Number'),
+                    TextInput::make("{$p}.about_cta_text")->default('Explore More'),
+                    TextInput::make("{$p}.about_cta_url")->default('/about'),
+                    Repeater::make("{$p}.about_checklist")
+                        ->simple(TextInput::make('item'))
+                        ->columnSpanFull(),
+                ]),
+            Section::make('Brand Strip')
+                ->schema([
+                    TextInput::make("{$p}.brand_text")->default('1k + Brands Trust Us'),
+                ]),
+            Section::make('Services Block')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.services_subtitle")->default('What We Do'),
+                    TextInput::make("{$p}.services_title")->columnSpanFull(),
+                    TextInput::make("{$p}.services_cta_text")->default('See all Services'),
+                    TextInput::make("{$p}.cta_title")->label('Services CTA Title')->columnSpanFull(),
+                    TextInput::make("{$p}.cta_phone")->label('CTA Phone'),
+                ]),
+            Section::make('Work Process')
+                ->schema([
+                    TextInput::make("{$p}.process_subtitle")->default('How IT work'),
+                    TextInput::make("{$p}.process_title")->default('Standard Work Process'),
+                    Repeater::make("{$p}.process_steps")
+                        ->schema([
+                            TextInput::make('title')->required(),
+                            Textarea::make('text')->rows(2),
+                            FileUpload::make('icon')->image()->directory('home/process')->disk('public'),
+                        ])
+                        ->columns(2)
+                        ->defaultItems(0),
+                ]),
+            Section::make('Achievements')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.achievement_subtitle")->default('achievement'),
+                    TextInput::make("{$p}.achievement_title")->columnSpanFull(),
+                    Repeater::make("{$p}.achievements")
+                        ->schema([
+                            TextInput::make('number')->required(),
+                            TextInput::make('label')->required(),
+                            FileUpload::make('icon')->image()->directory('home/achievements')->disk('public'),
+                        ])
+                        ->columns(3)
+                        ->columnSpanFull(),
+                ]),
+            Section::make('Projects Block')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.projects_subtitle")->default('PROJECTS'),
+                    TextInput::make("{$p}.projects_title")->columnSpanFull(),
+                    TextInput::make("{$p}.projects_video_url"),
+                ]),
+            Section::make('Team / Testimonials / Blog titles')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.team_subtitle")->default('Team Members'),
+                    TextInput::make("{$p}.team_title")->columnSpanFull(),
+                    TextInput::make("{$p}.testimonial_subtitle")->default('Testimonials'),
+                    TextInput::make("{$p}.testimonial_title")->columnSpanFull(),
+                    TextInput::make("{$p}.blog_subtitle")->default('Latest Blog'),
+                    TextInput::make("{$p}.blog_title")->columnSpanFull(),
+                    TextInput::make("{$p}.marque_items")->label('Marquee items (comma separated)')->columnSpanFull(),
+                ]),
+        ];
     }
 
     /**

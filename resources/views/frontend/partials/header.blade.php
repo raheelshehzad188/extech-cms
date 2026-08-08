@@ -1,8 +1,48 @@
+@php
+    $isHome3 = ($settings->home_template ?? 'home-1') === 'home-3' && request()->routeIs('home');
+@endphp
 <header>
-    <div id="header-sticky" class="header-1">
+    @if($isHome3)
+        <div class="header-top-section top-style-3">
+            <div class="container">
+                <div class="header-top-wrapper">
+                    <ul class="contact-list">
+                        @if($settings->email)
+                            <li>
+                                <i class="far fa-envelope"></i>
+                                <a href="mailto:{{ $settings->email }}" class="link">{{ $settings->email }}</a>
+                            </li>
+                        @endif
+                        @if($settings->phone)
+                            <li>
+                                <i class="fa-solid fa-phone-volume"></i>
+                                <a href="tel:{{ preg_replace('/\s+/', '', $settings->phone) }}">{{ $settings->phone }}</a>
+                            </li>
+                        @endif
+                    </ul>
+                    <div class="top-right">
+                        <div class="social-icon d-flex align-items-center">
+                            <span>Follow Us:</span>
+                            @if($settings->facebook)<a href="{{ $settings->facebook }}"><i class="fab fa-facebook-f"></i></a>@endif
+                            @if($settings->twitter)<a href="{{ $settings->twitter }}"><i class="fab fa-twitter"></i></a>@endif
+                            @if($settings->linkedin)<a href="{{ $settings->linkedin }}"><i class="fa-brands fa-linkedin-in"></i></a>@endif
+                            @if($settings->youtube)<a href="{{ $settings->youtube }}"><i class="fa-brands fa-youtube"></i></a>@endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div id="header-sticky" class="{{ $isHome3 ? 'header-3' : 'header-1' }}">
+        @if($isHome3)
+            <div class="plane-shape">
+                <img src="{{ asset('assets/img/plane.png') }}" alt="shape-img">
+            </div>
+        @endif
         <div class="container">
             <div class="mega-menu-wrapper">
-                <div class="header-main style-2">
+                <div class="header-main {{ $isHome3 ? '' : 'style-2' }}">
                     <div class="header-left">
                         <div class="logo">
                             <a href="{{ route('home') }}" class="header-logo">
@@ -10,54 +50,51 @@
                             </a>
                         </div>
                     </div>
-                    <div class="header-middle">
-                        <div class="mean__menu-wrapper">
-                            <div class="main-menu">
-                                <nav id="mobile-menu">
-                                    <ul>
-                                        @forelse($headerMenu as $item)
-                                            <li class="{{ $item->children->count() ? 'has-dropdown' : '' }} {{ request()->url() === url($item->href()) ? 'active' : '' }}">
-                                                <a href="{{ $item->href() }}">
-                                                    {{ $item->label }}
-                                                    @if($item->children->count())
-                                                        <i class="fas fa-angle-down"></i>
-                                                    @endif
-                                                </a>
-                                                @if($item->children->count())
-                                                    <ul class="submenu">
-                                                        @foreach($item->children as $child)
-                                                            <li><a href="{{ $child->href() }}">{{ $child->label }}</a></li>
-                                                        @endforeach
-                                                    </ul>
-                                                @endif
-                                            </li>
-                                        @empty
-                                            <li class="{{ request()->routeIs('home') ? 'active' : '' }}"><a href="{{ route('home') }}">Home</a></li>
-                                            <li><a href="{{ route('about') }}">About</a></li>
-                                            <li><a href="{{ route('services.index') }}">Services</a></li>
-                                            <li><a href="{{ route('team.index') }}">Team</a></li>
-                                            <li><a href="{{ route('projects.index') }}">Projects</a></li>
-                                            <li><a href="{{ route('blog.index') }}">Blog</a></li>
-                                            <li><a href="{{ route('contact') }}">Contact</a></li>
-                                        @endforelse
-                                    </ul>
-                                </nav>
+                    @if($isHome3)
+                        <div class="header-right d-flex justify-content-end align-items-center">
+                            <div class="mean__menu-wrapper">
+                                <div class="main-menu">
+                                    <nav id="mobile-menu">
+                                        @include('frontend.partials.nav-items')
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="header-button">
+                                <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="theme-btn bg-white">
+                                    <span>
+                                        {{ $settings->header_cta_text ?: 'get A Quote' }}
+                                        <i class="fa-solid fa-arrow-right-long"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="header__hamburger d-lg-none my-auto">
+                                <div class="sidebar__toggle"><i class="fas fa-bars"></i></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="header-right d-flex justify-content-end align-items-center">
-                        <div class="header-button ms-4">
-                            <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="gt-btn">
-                                <span>
-                                    {{ $settings->header_cta_text ?: 'Get A Quote' }}
-                                    <i class="fa-solid fa-arrow-right-long"></i>
-                                </span>
-                            </a>
+                    @else
+                        <div class="header-middle">
+                            <div class="mean__menu-wrapper">
+                                <div class="main-menu">
+                                    <nav id="mobile-menu">
+                                        @include('frontend.partials.nav-items')
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
-                        <div class="header__hamburger d-block d-xl-none my-auto">
-                            <div class="sidebar__toggle"><i class="fas fa-bars"></i></div>
+                        <div class="header-right d-flex justify-content-end align-items-center">
+                            <div class="header-button ms-4">
+                                <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="gt-btn">
+                                    <span>
+                                        {{ $settings->header_cta_text ?: 'Get A Quote' }}
+                                        <i class="fa-solid fa-arrow-right-long"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="header__hamburger d-block d-xl-none my-auto">
+                                <div class="sidebar__toggle"><i class="fas fa-bars"></i></div>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

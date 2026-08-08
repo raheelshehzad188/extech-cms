@@ -1,13 +1,22 @@
-@php $letters = str_split($settings->preloader_text ?: 'EXTECH'); @endphp
+@php
+    $letters = str_split($settings->preloader_text ?: 'EXTECH');
+    $preloaderGif = $settings->preloaderGifUrl();
+@endphp
 <div id="preloader" class="preloader">
     <div class="animation-preloader">
-        <div class="spinner"></div>
-        <div class="txt-loading">
-            @foreach($letters as $letter)
-                <span data-text-preloader="{{ $letter }}" class="letters-loading">{{ $letter }}</span>
-            @endforeach
-        </div>
-        <p class="text-center">Loading</p>
+        @if($preloaderGif)
+            <div class="preloader-gif text-center mb-3">
+                <img src="{{ $preloaderGif }}" alt="Loading" style="max-width:120px;height:auto;">
+            </div>
+        @else
+            <div class="spinner"></div>
+            <div class="txt-loading">
+                @foreach($letters as $letter)
+                    <span data-text-preloader="{{ $letter }}" class="letters-loading">{{ $letter }}</span>
+                @endforeach
+            </div>
+        @endif
+        <p class="text-center">{{ $settings->preloader_loading_text ?: 'Loading' }}</p>
     </div>
     <div class="loader">
         <div class="row">

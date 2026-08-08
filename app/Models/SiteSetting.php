@@ -90,6 +90,30 @@ class SiteSetting extends Model
             : asset('assets/img/favicon.svg');
     }
 
+    public function preloaderGifUrl(): ?string
+    {
+        return $this->preloader_gif
+            ? asset('storage/'.$this->preloader_gif)
+            : null;
+    }
+
+    public static function mediaUrl(?string $path, string $fallback = ''): string
+    {
+        if (blank($path)) {
+            return $fallback ? asset($fallback) : '';
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, 'assets/')) {
+            return asset($path);
+        }
+
+        return asset('storage/'.$path);
+    }
+
     public function defaultBannerUrl(): string
     {
         return $this->default_banner

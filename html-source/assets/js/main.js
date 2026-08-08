@@ -32,14 +32,36 @@ Js TABLE OF CONTENTS
 (function ($) {
     "use strict";
 
+    // Soft stub: some cached/old scripts call owlCarousel; Extech uses Swiper instead.
+    if (typeof $.fn.owlCarousel !== "function") {
+        $.fn.owlCarousel = function () {
+            return this;
+        };
+    }
+
+    function initSwiper(selector, options) {
+        if (!document.querySelector(selector)) {
+            return null;
+        }
+
+        try {
+            return new Swiper(selector, options);
+        } catch (error) {
+            console.warn("Swiper init skipped for", selector, error);
+            return null;
+        }
+    }
+
     $(document).ready(function () {
 
         //>> Mobile Menu Js Start <<//
-        $('#mobile-menu').meanmenu({
-            meanMenuContainer: '.mobile-menu',
-            meanScreenWidth: "991",
-            meanExpand: ['<i class="far fa-plus"></i>'],
-        });
+        if ($.fn.meanmenu && $('#mobile-menu').length) {
+            $('#mobile-menu').meanmenu({
+                meanMenuContainer: '.mobile-menu',
+                meanScreenWidth: "991",
+                meanExpand: ['<i class="far fa-plus"></i>'],
+            });
+        }
 
         //>> Sidebar Toggle Js Start <<//
         $(".offcanvas__close,.offcanvas__overlay").on("click", function () {
@@ -70,7 +92,7 @@ Js TABLE OF CONTENTS
 
         //>> Hero-1 Slider Start <<//
         const sliderActive2 = ".hero-slider";
-        const sliderInit2 = new Swiper(sliderActive2, {
+        const sliderInit2 = initSwiper(sliderActive2, {
             loop: true,
             slidesPerView: 1,
             effect: "fade",
@@ -86,6 +108,9 @@ Js TABLE OF CONTENTS
         });
 
         function animated_swiper(selector, init) {
+            if (!init) {
+                return;
+            }
             const animated = function animated() {
                 $(selector + " [data-animation]").each(function () {
                     let anim = $(this).data("animation");
@@ -119,64 +144,72 @@ Js TABLE OF CONTENTS
 
         //>> Magnific Popup <<//   
         /* magnificPopup img view */
-        $(".popup-image").magnificPopup({
-            type: "image",
-            mainClass: 'mfp-zoom-in',
-            removalDelay: 260,
-            gallery: {
-                enabled: true,
-            },
-        });
+        if ($.fn.magnificPopup) {
+            $(".popup-image").magnificPopup({
+                type: "image",
+                mainClass: 'mfp-zoom-in',
+                removalDelay: 260,
+                gallery: {
+                    enabled: true,
+                },
+            });
 
 
 
-        /* magnificPopup video view */
-        $(".popup-video").magnificPopup({
-            type: "iframe",
-            removalDelay: 260,
-            mainClass: 'mfp-zoom-in',
-        });
+            /* magnificPopup video view */
+            $(".popup-video").magnificPopup({
+                type: "iframe",
+                removalDelay: 260,
+                mainClass: 'mfp-zoom-in',
+            });
 
 
 
-        /* magnificPopup video view */
-        $(".popup-content").magnificPopup({
-            type: "inline",
-            midClick: true,
-        });
+            /* magnificPopup video view */
+            $(".popup-content").magnificPopup({
+                type: "inline",
+                midClick: true,
+            });
 
 
 
-        //>> Video Popup Start <<//
-        $(".img-popup").magnificPopup({
-            type: "image",
-            gallery: {
-                enabled: true,
-            },
-        });
+            //>> Video Popup Start <<//
+            $(".img-popup").magnificPopup({
+                type: "image",
+                gallery: {
+                    enabled: true,
+                },
+            });
+        }
 
 
 
         //>> Counter Up  <<//    
-        $(".counter-number").counterUp({
-            delay: 10,
-            time: 1000,
-        });
+        if ($.fn.counterUp && $(".counter-number").length) {
+            $(".counter-number").counterUp({
+                delay: 10,
+                time: 1000,
+            });
+        }
 
 
 
         //>> Wow Animation Start <<//
-        new WOW().init();
+        if (typeof WOW !== "undefined") {
+            new WOW().init();
+        }
 
 
 
         //>> Nice Select Start <<//
-        $('select').niceSelect();
+        if ($.fn.niceSelect && $('select').length) {
+            $('select').niceSelect();
+        }
 
 
 
         //>> Brand Slider Start <<//
-        const brandSlider = new Swiper(".brand-slider", {
+        const brandSlider = initSwiper(".brand-slider", {
             spaceBetween: 30,
             speed: 1300,
             loop: true,
@@ -205,7 +238,7 @@ Js TABLE OF CONTENTS
             },
         });
 
-        const brandSlider2 = new Swiper(".brand-slider-2", {
+        const brandSlider2 = initSwiper(".brand-slider-2", {
             spaceBetween: 30,
             speed: 1300,
             loop: true,
@@ -237,7 +270,7 @@ Js TABLE OF CONTENTS
 
 
         //>> Service Slider Start <<// 
-        const serviceSlider2 = new Swiper(".service-slider-2", {
+        const serviceSlider2 = initSwiper(".service-slider-2", {
             spaceBetween: 30,
             speed: 1500,
             loop: true,
@@ -272,7 +305,7 @@ Js TABLE OF CONTENTS
 
 
         //>> Project Slider Start <<// 
-        const projectSlider2 = new Swiper(".project-slider-2", {
+        const projectSlider2 = initSwiper(".project-slider-2", {
             spaceBetween: 30,
             speed: 1500,
             loop: true,
@@ -309,7 +342,7 @@ Js TABLE OF CONTENTS
             },
         });
 
-        const projectSlider3 = new Swiper(".project-slider-3", {
+        const projectSlider3 = initSwiper(".project-slider-3", {
             spaceBetween: 30,
             speed: 1500,
             loop: true,
@@ -349,7 +382,7 @@ Js TABLE OF CONTENTS
 
         //>> Testimonial Slider Start <<// 
 
-        const testimonialSlider2 = new Swiper(".testimonial-slider-2", {
+        const testimonialSlider2 = initSwiper(".testimonial-slider-2", {
             speed: 1500,
             loop: true,
             spaceBetween: 30,
@@ -383,7 +416,7 @@ Js TABLE OF CONTENTS
 
 
         //>> News Slider Start <<//
-        const newsSlider = new Swiper(".news-slider", {
+        const newsSlider = initSwiper(".news-slider", {
             spaceBetween: 30,
             speed: 1500,
             loop: true,
@@ -419,7 +452,7 @@ Js TABLE OF CONTENTS
 
 
         //>> Team Slider Start <<//
-        const teamSlider = new Swiper(".team-slider", {
+        const teamSlider = initSwiper(".team-slider", {
             spaceBetween: 30,
             speed: 1500,
             loop: true,
