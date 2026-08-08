@@ -98,17 +98,33 @@
 
     @include('frontend.partials.footer')
 
-    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.meanmenu.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.waypoints.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
-    <script src="{{ asset('assets/js/swiper-bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('assets/js/wow.min.js') }}"></script>
-    <script src="{{ asset('assets/js/viewport.jquery.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+    @php
+        $assetV = static function (string $path): string {
+            $full = public_path($path);
+            $ver = is_file($full) ? (string) filemtime($full) : (string) time();
+
+            return asset($path).'?v='.$ver;
+        };
+    @endphp
+    <script src="{{ $assetV('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script>
+        // Prevent hard crashes if any cached script still calls owlCarousel.
+        (function (jq) {
+            if (jq && jq.fn && typeof jq.fn.owlCarousel !== 'function') {
+                jq.fn.owlCarousel = function () { return this; };
+            }
+        })(window.jQuery);
+    </script>
+    <script src="{{ $assetV('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/jquery.meanmenu.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/jquery.waypoints.js') }}"></script>
+    <script src="{{ $assetV('assets/js/jquery.counterup.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/swiper-bundle.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/wow.min.js') }}"></script>
+    <script src="{{ $assetV('assets/js/viewport.jquery.js') }}"></script>
+    <script src="{{ $assetV('assets/js/main.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

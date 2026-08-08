@@ -396,7 +396,7 @@
                         <div class="swiper-slide">
                             <div class="project-items style-2">
                                 <div class="project-image">
-                                    <img src="{{ $project->imageUrl() ?: asset('assets/img/project/0'.(8 + $loop->index).'.jpg') }}" alt="{{ $project->title }}">
+                                    <img src="{{ $project->imageUrl() ?: asset('assets/img/project/'.str_pad((string) (8 + $loop->index), 2, '0', STR_PAD_LEFT).'.jpg') }}" alt="{{ $project->title }}">
                                     <div class="project-content style3">
                                         <p>{{ $project->category ?: 'Technology' }}</p>
                                         <h4><a href="{{ route('projects.show', $project) }}">{{ $project->title }}</a></h4>
@@ -412,7 +412,7 @@
                             <div class="swiper-slide">
                                 <div class="project-items style-2">
                                     <div class="project-image">
-                                        <img src="{{ asset('assets/img/project/'.$i.'.jpg') }}" alt="project-img">
+                                        <img src="{{ asset('assets/img/project/'.str_pad((string) $i, 2, '0', STR_PAD_LEFT).'.jpg') }}" alt="project-img">
                                         <div class="project-content style3">
                                             <p>Technology</p>
                                             <h4><a href="{{ route('projects.index') }}">Project {{ $i }}</a></h4>
