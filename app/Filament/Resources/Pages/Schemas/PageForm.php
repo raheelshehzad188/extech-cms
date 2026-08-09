@@ -11,6 +11,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -45,10 +46,22 @@ class PageForm
                                         ->directory('pages')
                                         ->disk('public')
                                         ->helperText('Empty = Site Settings default banner'),
-                                    Textarea::make('content')->rows(8)->columnSpanFull(),
+                                    Textarea::make('content')->rows(8)->columnSpanFull()->helperText('Contact page pe ye form ke neeche intro text banega'),
                                     Toggle::make('is_published')->default(true),
                                     TextInput::make('sort_order')->numeric()->default(0),
                                 ]),
+                                Section::make('Contact Page Extra')
+                                    ->visible(fn (Get $get): bool => $get('template') === 'contact')
+                                    ->columns(2)
+                                    ->schema([
+                                        TextInput::make('sections.form_title')->label('Form Title')->default('Ready to Get Started?'),
+                                        TextInput::make('sections.phone_label')->label('Phone Label')->default('Call Us 7/24'),
+                                        TextInput::make('sections.email_label')->label('Email Label')->default('Make a Quote'),
+                                        TextInput::make('sections.location_label')->label('Location Label')->default('Location'),
+                                        Textarea::make('sections.form_text')->label('Form Intro Text')->rows(3)->columnSpanFull(),
+                                        FileUpload::make('sections.video_image')->label('Side Video Image')->image()->directory('pages/contact')->disk('public'),
+                                        TextInput::make('sections.video_url')->label('Video URL')->default('https://www.youtube.com/watch?v=Cn4G2lZ_g2I')->columnSpanFull(),
+                                    ]),
                             ]),
                         Tab::make('SEO')
                             ->schema([SeoForm::section()]),

@@ -244,6 +244,16 @@ class ManageSiteSettings extends Page
                     TextInput::make("{$p}.cta_title")->label('Services CTA Title')->columnSpanFull(),
                     TextInput::make("{$p}.cta_phone")->label('CTA Phone'),
                 ]),
+            Section::make('Pricing Section')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$p}.pricing_subtitle")->default('Our Pricing'),
+                    TextInput::make("{$p}.pricing_title")->default('Our Awesome Pricing Plans')->columnSpanFull(),
+                    TextInput::make("{$p}.pricing_monthly_label")->default('Monthly'),
+                    TextInput::make("{$p}.pricing_yearly_label")->default('Yearly'),
+                    TextInput::make("{$p}.pricing_save_text")->default('Save 25%'),
+                ])
+                ->description('Plans manage karein: Website → Pricing Plans'),
             Section::make('Work Process')
                 ->schema([
                     TextInput::make("{$p}.process_subtitle")->default('How IT work'),
@@ -328,6 +338,16 @@ class ManageSiteSettings extends Page
                     TextInput::make("{$prefix}.services_title")->label('Title')->columnSpanFull(),
                     Textarea::make("{$prefix}.services_text")->label('Text')->rows(3)->columnSpanFull(),
                 ]),
+            Section::make('Pricing Section')
+                ->columns(2)
+                ->schema([
+                    TextInput::make("{$prefix}.pricing_subtitle")->label('Subtitle')->default('Our Pricing'),
+                    TextInput::make("{$prefix}.pricing_title")->label('Title')->default('Our Awesome Pricing Plans')->columnSpanFull(),
+                    TextInput::make("{$prefix}.pricing_monthly_label")->label('Monthly Tab')->default('Monthly'),
+                    TextInput::make("{$prefix}.pricing_yearly_label")->label('Yearly Tab')->default('Yearly'),
+                    TextInput::make("{$prefix}.pricing_save_text")->label('Save Badge')->default('Save 25%'),
+                ])
+                ->description('Plans manage karein: Website → Pricing Plans'),
             Section::make('CTA / Extra Texts')
                 ->columns(2)
                 ->schema([

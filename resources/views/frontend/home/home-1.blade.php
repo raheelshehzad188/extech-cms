@@ -66,6 +66,7 @@
 </section>
 
 @include('frontend.partials.home-services')
+@include('frontend.partials.home-pricing')
 @include('frontend.partials.home-about')
 @include('frontend.partials.home-team')
 @include('frontend.partials.home-cta')

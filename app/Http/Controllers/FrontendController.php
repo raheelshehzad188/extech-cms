@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Faq;
 use App\Models\Page;
 use App\Models\Post;
+use App\Models\PricingPlan;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\TeamMember;
+use App\Support\ContactDefaults;
+use App\Support\PricingDefaults;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -23,6 +26,7 @@ class FrontendController extends Controller
             'settings' => $settings,
             'home' => $home,
             'services' => Service::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
+            'pricingPlans' => PricingPlan::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'team' => TeamMember::query()->where('is_published', true)->orderBy('sort_order')->take(4)->get(),
             'projects' => Project::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'posts' => Post::query()->where('is_published', true)->orderByDesc('published_at')->take(3)->get(),
@@ -44,11 +48,24 @@ class FrontendController extends Controller
 
     public function contact(): View
     {
-        $page = Page::query()->where('slug', 'contact')->where('is_published', true)->first();
+        $page = Page::query()->where('slug', 'contact')->where('is_published', true)->first()
+            ?? new Page([
+                'title' => 'Contact Us',
+                'breadcrumb_title' => 'Contact Us',
+                'content' => 'Nullam varius, erat quis iaculis dictum, eros urna varius eros, ut blandit felis odio in turpis. Quisque rhoncus, eros in auctor ultrices,',
+                'template' => 'contact',
+                'sections' => [
+                    'form_title' => 'Ready to Get Started?',
+                    'phone_label' => 'Call Us 7/24',
+                    'email_label' => 'Make a Quote',
+                    'location_label' => 'Location',
+                    'video_url' => 'https://www.youtube.com/watch?v=Cn4G2lZ_g2I',
+                ],
+            ]);
 
         return view('frontend.pages.contact', [
             'page' => $page,
-            'seo' => $page ?? SiteSetting::current(),
+            'seo' => $page->exists ? $page : SiteSetting::current(),
         ]);
     }
 
@@ -154,6 +171,28 @@ class FrontendController extends Controller
 
         // Store or mail later — for now flash success
         return back()->with('success', 'Thank you! Your message has been received.');
+    }
+
+    public function contactFillDefaults()
+    {
+        abort_unless(auth()->check() || config('app.debug'), 403);
+
+        ContactDefaults::apply(overwriteSiteSettings: true);
+
+        return redirect()
+            ->route('contact')
+            ->with('success', 'Contact default data filled successfully.');
+    }
+
+    public function pricingFillDefaults()
+    {
+        abort_unless(auth()->check() || config('app.debug'), 403);
+
+        $plans = PricingDefaults::apply(replaceExisting: true);
+
+        return redirect()
+            ->to(route('home').'#pricing')
+            ->with('success', 'Pricing default data filled successfully ('.$plans->count().' plans).');
     }
 
     protected function pageSeo(string $slug, string $fallbackTitle)

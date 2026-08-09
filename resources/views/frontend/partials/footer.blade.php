@@ -1,4 +1,9 @@
-<footer class="footer-section pt-100 footer-bg">
+@php
+    $isHome = request()->routeIs('home');
+    $footerSectionClass = $isHome ? 'footer-section pt-100 footer-bg' : 'footer-section pt-100 bg-theme-color2';
+    $widgetAreaClass = $isHome ? 'widget-area style1 footer-bg pb-80' : 'widget-area style1 pb-80';
+@endphp
+<footer class="{{ $footerSectionClass }}">
     <div class="container">
         <div class="contact-info-area">
             <div class="contact-info-items wow fadeInUp" data-wow-delay=".3s">
@@ -35,7 +40,7 @@
         </div>
     </div>
 
-    <div class="widget-area style1 footer-bg pb-80">
+    <div class="{{ $widgetAreaClass }}">
         <div class="container">
             <div class="footer-layout style1">
                 <div class="row">

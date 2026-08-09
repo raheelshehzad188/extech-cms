@@ -287,6 +287,8 @@
     </div>
 </section>
 
+@include('frontend.partials.home-pricing')
+
 {{-- Work Process --}}
 <section class="work-process-section fix section-padding pt-0">
     <div class="container">
