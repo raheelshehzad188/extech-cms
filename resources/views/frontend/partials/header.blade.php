@@ -1,8 +1,13 @@
 @php
-    $isHome3 = ($settings->home_template ?? 'home-1') === 'home-3' && request()->routeIs('home');
+    $headerStyle = match ($settings->home_template ?? 'home-1') {
+        'home-3' => 'header-3',
+        'home-2' => 'header-2',
+        default => 'header-1',
+    };
+    $useHeader3 = $headerStyle === 'header-3';
 @endphp
 <header>
-    @if($isHome3)
+    @if($useHeader3)
         <div class="header-top-section top-style-3">
             <div class="container">
                 <div class="header-top-wrapper">
@@ -27,6 +32,7 @@
                             @if($settings->twitter)<a href="{{ $settings->twitter }}"><i class="fab fa-twitter"></i></a>@endif
                             @if($settings->linkedin)<a href="{{ $settings->linkedin }}"><i class="fa-brands fa-linkedin-in"></i></a>@endif
                             @if($settings->youtube)<a href="{{ $settings->youtube }}"><i class="fa-brands fa-youtube"></i></a>@endif
+                            @if($settings->instagram)<a href="{{ $settings->instagram }}"><i class="fab fa-instagram"></i></a>@endif
                         </div>
                     </div>
                 </div>
@@ -34,15 +40,15 @@
         </div>
     @endif
 
-    <div id="header-sticky" class="{{ $isHome3 ? 'header-3' : 'header-1' }}">
-        @if($isHome3)
+    <div id="header-sticky" class="{{ $headerStyle }}">
+        @if($useHeader3)
             <div class="plane-shape">
                 <img src="{{ asset('assets/img/plane.png') }}" alt="shape-img">
             </div>
         @endif
         <div class="container">
             <div class="mega-menu-wrapper">
-                <div class="header-main {{ $isHome3 ? '' : 'style-2' }}">
+                <div class="header-main {{ $useHeader3 ? '' : 'style-2' }}">
                     <div class="header-left">
                         <div class="logo">
                             <a href="{{ route('home') }}" class="header-logo">
@@ -50,7 +56,8 @@
                             </a>
                         </div>
                     </div>
-                    @if($isHome3)
+
+                    @if($useHeader3)
                         <div class="header-right d-flex justify-content-end align-items-center">
                             <div class="mean__menu-wrapper">
                                 <div class="main-menu">
@@ -59,6 +66,7 @@
                                     </nav>
                                 </div>
                             </div>
+                            <a href="#0" class="search-trigger search-icon"><i class="fal fa-search"></i></a>
                             <div class="header-button">
                                 <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="theme-btn bg-white">
                                     <span>

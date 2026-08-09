@@ -21,21 +21,6 @@
     'banner_image' => $page->banner_image ?? null,
 ])
 
-@if(auth()->check() || config('app.debug'))
-    <div class="container" style="margin-top:20px;margin-bottom:-10px;">
-        <form method="POST" action="{{ route('contact.fill-defaults') }}" onsubmit="return confirm('Contact page pe default template data set kar dein?');">
-            @csrf
-            <button type="submit" class="theme-btn" style="background:#f59e0b;border:0;">
-                Fill Default Data
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-            </button>
-            <small style="display:block;margin-top:8px;opacity:.75;">
-                Press se contact defaults set — phone, email, address, map, form text. Manual DB edit ki zarurat nahi.
-            </small>
-        </form>
-    </div>
-@endif
-
 <!-- Contact Section Start -->
 <section class="contact-section fix section-padding">
     <div class="container">

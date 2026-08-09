@@ -7,10 +7,6 @@ Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/about', [FrontendController::class, 'about'])->name('about');
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
 Route::post('/contact', [FrontendController::class, 'contactSubmit'])->name('contact.submit');
-Route::post('/contact/fill-defaults', [FrontendController::class, 'contactFillDefaults'])
-    ->name('contact.fill-defaults');
-Route::post('/pricing/fill-defaults', [FrontendController::class, 'pricingFillDefaults'])
-    ->name('pricing.fill-defaults');
 Route::get('/services', [FrontendController::class, 'services'])->name('services.index');
 Route::get('/services/{service:slug}', [FrontendController::class, 'serviceShow'])->name('services.show');
 Route::get('/team', [FrontendController::class, 'team'])->name('team.index');

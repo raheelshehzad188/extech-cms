@@ -7,21 +7,6 @@
     $yearlyLabel = $home['pricing_yearly_label'] ?? 'Yearly';
 @endphp
 
-@if(auth()->check() || config('app.debug'))
-    <div class="container" style="margin-top:20px;margin-bottom:10px;">
-        <form method="POST" action="{{ route('pricing.fill-defaults') }}" onsubmit="return confirm('Pricing plans default data set kar dein? Existing plans replace ho jayenge.');">
-            @csrf
-            <button type="submit" class="theme-btn" style="background:#f59e0b;border:0;">
-                Fill Default Pricing Data
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-            </button>
-            <small style="display:block;margin-top:8px;opacity:.75;">
-                Press se 3 default plans + pricing section titles set. Manual DB edit ki zarurat nahi.
-            </small>
-        </form>
-    </div>
-@endif
-
 @if($pricingPlans->isNotEmpty())
 <section class="pricing-section fix section-padding" id="pricing">
     <div class="pricing-wrapper style1">

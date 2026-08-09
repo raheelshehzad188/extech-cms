@@ -10,8 +10,6 @@ use App\Models\Project;
 use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\TeamMember;
-use App\Support\ContactDefaults;
-use App\Support\PricingDefaults;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -171,28 +169,6 @@ class FrontendController extends Controller
 
         // Store or mail later — for now flash success
         return back()->with('success', 'Thank you! Your message has been received.');
-    }
-
-    public function contactFillDefaults()
-    {
-        abort_unless(auth()->check() || config('app.debug'), 403);
-
-        ContactDefaults::apply(overwriteSiteSettings: true);
-
-        return redirect()
-            ->route('contact')
-            ->with('success', 'Contact default data filled successfully.');
-    }
-
-    public function pricingFillDefaults()
-    {
-        abort_unless(auth()->check() || config('app.debug'), 403);
-
-        $plans = PricingDefaults::apply(replaceExisting: true);
-
-        return redirect()
-            ->to(route('home').'#pricing')
-            ->with('success', 'Pricing default data filled successfully ('.$plans->count().' plans).');
     }
 
     protected function pageSeo(string $slug, string $fallbackTitle)
