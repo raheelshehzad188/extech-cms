@@ -168,15 +168,15 @@
                                     @csrf
                                     <input type="hidden" name="source" value="footer">
                                     <div class="email-input-container">
-                                        <input type="email" name="email" id="newsletterEmail" placeholder="Your email address" value="{{ old('email') }}" required autocomplete="email">
-                                        <button type="submit" id="submitButton" disabled aria-label="Subscribe to newsletter">
+                                        <input type="email" name="email" id="email" placeholder="Your email address" value="{{ old('email') }}" required autocomplete="email">
+                                        <button type="submit" id="submitButton" aria-label="Subscribe to newsletter">
                                             <i class="fa-regular fa-arrow-right-long"></i>
                                         </button>
                                     </div>
-                                    <label class="custom-checkbox mt-2">
+                                    <label class="custom-checkbox mt-2" for="agreeCheckbox">
                                         <input type="checkbox" name="agree" id="agreeCheckbox" value="1" {{ old('agree') ? 'checked' : '' }}>
                                         <span class="checkmark"></span>
-                                        I agree to the <a class="text-underline" href="{{ route('contact') }}" target="_blank">Privacy Policy.</a>
+                                        I agree to the <a class="text-underline" href="{{ route('contact') }}" target="_blank" rel="noopener">Privacy Policy.</a>
                                     </label>
                                     @error('email')
                                         <small class="text-danger d-block mt-1">{{ $message }}</small>

@@ -8255,9 +8255,17 @@ h6 {
   border: 1px solid var(--title-color);
 }
 
-/* Hide the default checkbox */
+/* Visually hide default checkbox (keep clickable for label / assistive tech) */
 .custom-checkbox input[type=checkbox] {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  left: 0;
+  top: 5px;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
 }
 
 /* Style the label */

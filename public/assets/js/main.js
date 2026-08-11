@@ -724,66 +724,89 @@ Js TABLE OF CONTENTS
 
 
         //>> Newsletter subscribe <<//
-        const checkbox = $('#agreeCheckbox');
-        const submitButton = $('#submitButton');
         const newsletterForm = $('#newsletterForm');
 
-        if (checkbox.length && submitButton.length) {
-            const syncNewsletterButton = function () {
-                submitButton.prop('disabled', !checkbox.is(':checked') || submitButton.data('loading') === true);
+        if (newsletterForm.length) {
+            const checkbox = newsletterForm.find('#agreeCheckbox');
+            const submitButton = newsletterForm.find('#submitButton');
+            const emailInput = newsletterForm.find('#email');
+            const messageBox = $('#newsletter-message');
+            const csrfToken = $('meta[name="csrf-token"]').attr('content')
+                || newsletterForm.find('input[name="_token"]').val();
+
+            const showNewsletterMessage = function (type, text) {
+                messageBox
+                    .removeClass('alert alert-success alert-danger')
+                    .addClass('alert alert-' + type + ' py-2 px-3')
+                    .css({
+                        display: 'block',
+                        color: type === 'success' ? '#0f5132' : '#842029',
+                        background: type === 'success' ? '#d1e7dd' : '#f8d7da',
+                        borderRadius: '6px'
+                    })
+                    .text(text)
+                    .show();
             };
 
-            checkbox.on('change', syncNewsletterButton);
-            syncNewsletterButton();
-        }
+            const setNewsletterLoading = function (loading) {
+                submitButton.data('loading', loading);
+                submitButton.prop('disabled', loading === true);
+            };
 
-        if (newsletterForm.length) {
             newsletterForm.on('submit', function (e) {
                 e.preventDefault();
 
-                if (!checkbox.is(':checked')) {
+                const email = $.trim(emailInput.val() || '');
+
+                if (!email) {
+                    showNewsletterMessage('danger', 'Please enter your email address.');
+                    emailInput.trigger('focus');
                     return;
                 }
 
-                const form = $(this);
-                const messageBox = $('#newsletter-message');
-                const emailInput = $('#newsletterEmail');
+                if (!checkbox.is(':checked')) {
+                    showNewsletterMessage('danger', 'Please agree to the Privacy Policy before subscribing.');
+                    return;
+                }
 
-                submitButton.data('loading', true).prop('disabled', true);
-                messageBox.hide().removeClass('alert alert-success alert-danger');
+                setNewsletterLoading(true);
 
                 $.ajax({
-                    url: form.attr('action'),
+                    url: newsletterForm.attr('action'),
                     method: 'POST',
-                    data: form.serialize(),
+                    data: newsletterForm.serialize(),
+                    dataType: 'json',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
                     success: function (response) {
-                        messageBox
-                            .addClass('alert alert-success py-2 px-3')
-                            .text(response.message || 'Subscribed successfully.')
-                            .show();
+                        showNewsletterMessage('success', (response && response.message)
+                            ? response.message
+                            : 'Subscribed successfully.');
                         emailInput.val('');
                         checkbox.prop('checked', false);
                     },
                     error: function (xhr) {
                         let errorMessage = 'Unable to subscribe right now. Please try again.';
-                        if (xhr.responseJSON?.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        } else if (xhr.responseJSON?.errors) {
-                            const firstKey = Object.keys(xhr.responseJSON.errors)[0];
-                            errorMessage = xhr.responseJSON.errors[firstKey][0];
+                        const json = xhr.responseJSON || null;
+
+                        if (json && json.message) {
+                            errorMessage = json.message;
+                        } else if (json && json.errors) {
+                            const firstKey = Object.keys(json.errors)[0];
+                            if (firstKey && json.errors[firstKey] && json.errors[firstKey][0]) {
+                                errorMessage = json.errors[firstKey][0];
+                            }
+                        } else if (xhr.status === 419) {
+                            errorMessage = 'Session expired. Please refresh the page and try again.';
                         }
-                        messageBox
-                            .addClass('alert alert-danger py-2 px-3')
-                            .text(errorMessage)
-                            .show();
+
+                        showNewsletterMessage('danger', errorMessage);
                     },
                     complete: function () {
-                        submitButton.data('loading', false);
-                        submitButton.prop('disabled', !checkbox.is(':checked'));
+                        setNewsletterLoading(false);
                     }
                 });
             });
