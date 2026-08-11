@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Filament\Resources\Pages\Pages;
+namespace App\Filament\Resources\SystemPages\Pages;
 
-use App\Filament\Resources\Pages\PageResource;
+use App\Filament\Resources\SystemPages\SystemPageResource;
 use App\Support\SystemPages;
 use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
-class ListPages extends ListRecords
+class ListSystemPages extends ListRecords
 {
-    protected static string $resource = PageResource::class;
+    protected static string $resource = SystemPageResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Action::make('ensureSystemPages')
-                ->label('Create System Pages')
+                ->label('Create Missing Pages')
                 ->icon('heroicon-o-sparkles')
                 ->color('warning')
                 ->requiresConfirmation()
                 ->modalHeading('Create System Pages')
-                ->modalDescription('About, Contact, Services, Team, Projects, Blog, FAQ, Quote pages create hongi. Purane pages overwrite nahi honge. Banner Images Settings → Page Banners se set karein.')
+                ->modalDescription('About, Contact, Services, Team, Projects, Blog, FAQ, Quote — missing pages create hongi. Existing data overwrite nahi hoga.')
                 ->action(function (): void {
                     $pages = SystemPages::ensure();
 
@@ -30,8 +29,9 @@ class ListPages extends ListRecords
                         ->title('System pages ready ('.$pages->count().')')
                         ->success()
                         ->send();
+
+                    $this->redirect(static::getUrl());
                 }),
-            CreateAction::make(),
         ];
     }
 }

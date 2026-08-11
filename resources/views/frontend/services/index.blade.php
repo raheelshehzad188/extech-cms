@@ -1,6 +1,9 @@
 @extends('layouts.frontend')
 @section('content')
-@include('frontend.partials.breadcrumb', ['title' => 'Our Services', 'banner_image' => null])
+@include('frontend.partials.breadcrumb', [
+    'title' => $seo->breadcrumb_title ?? $seo->title ?? 'Our Services',
+    'banner_image' => $seo->banner_image ?? null,
+])
 <section class="service-section fix section-padding">
     <div class="container">
         <div class="row g-4">

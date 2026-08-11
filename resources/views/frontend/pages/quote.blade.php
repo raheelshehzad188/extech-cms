@@ -4,6 +4,7 @@
 @include('frontend.partials.breadcrumb', [
     'title' => 'Get A Quote',
     'subtitle' => $selectedService?->title ? 'Quote for '.$selectedService->title : 'Get A Quote',
+    'banner_image' => $seo->banner_image ?? null,
 ])
 
 <section class="contact-section fix section-padding">

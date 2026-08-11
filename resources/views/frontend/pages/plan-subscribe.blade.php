@@ -4,6 +4,7 @@
 @include('frontend.partials.breadcrumb', [
     'title' => 'Buy Package',
     'subtitle' => $plan->name,
+    'banner_image' => $seo->banner_image ?? null,
 ])
 
 <section class="contact-section fix section-padding">

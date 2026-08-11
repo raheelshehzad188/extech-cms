@@ -226,8 +226,14 @@
 @endif
 
 {{-- Services --}}
+@php
+    $servicesBg = \App\Models\SiteSetting::mediaUrl(
+        $home['services_bg_image'] ?? null,
+        'assets/img/service/service-bg-3.jpg'
+    );
+@endphp
 <section class="service-section-3 pb-0 fix section-padding bg-cover"
-    style="background-image: url('{{ asset('assets/img/service/service-bg-3.jpg') }}');" id="service">
+    style="background-image: url('{{ $servicesBg }}');" id="service">
     <div class="container">
         <div class="row d-flex align-items-end justify-content-between mb-20">
             <div class="col-xl-7">
@@ -375,8 +381,14 @@
 </section>
 
 {{-- Projects --}}
+@php
+    $projectsBg = \App\Models\SiteSetting::mediaUrl(
+        $home['projects_bg_image'] ?? null,
+        'assets/img/testimonial/bg.jpg'
+    );
+@endphp
 <section class="project-section-3 section-padding pb-0 fix bg-cover"
-    style="background-image: url('{{ asset('assets/img/testimonial/bg.jpg') }}');">
+    style="background-image: url('{{ $projectsBg }}');">
     <div class="container">
         <div class="row gy-5 gx-70 d-flex align-items-center mb-20">
             <div class="col-xl-6">
@@ -459,7 +471,14 @@
 </div>
 
 {{-- Team --}}
-<section class="team-section-3 fix section-padding section-bg" id="team">
+@php
+    $teamBg = filled($home['team_bg_image'] ?? null)
+        ? \App\Models\SiteSetting::mediaUrl($home['team_bg_image'])
+        : null;
+@endphp
+<section class="team-section-3 fix section-padding {{ $teamBg ? 'bg-cover' : 'section-bg' }}"
+    @if($teamBg) style="background-image: url('{{ $teamBg }}');" @endif
+    id="team">
     <div class="line-shape"><img src="{{ asset('assets/img/team/line-shape.png') }}" alt="shape-img"></div>
     <div class="mask-shape"><img src="{{ asset('assets/img/team/mask-shape-2.png') }}" alt="shape-img"></div>
     <div class="container">

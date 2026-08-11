@@ -292,6 +292,13 @@ class ManageSiteSettings extends Page
                     TextInput::make("{$p}.services_cta_text")->default('See all Services'),
                     TextInput::make("{$p}.cta_title")->label('Services CTA Title')->columnSpanFull(),
                     TextInput::make("{$p}.cta_phone")->label('CTA Phone'),
+                    FileUpload::make("{$p}.services_bg_image")
+                        ->label('Services Section Background')
+                        ->image()
+                        ->directory('home/services')
+                        ->disk('public')
+                        ->helperText('Home 3 services section background (service-section-3)')
+                        ->columnSpanFull(),
                 ]),
             Section::make('Pricing Section')
                 ->columns(2)
@@ -333,12 +340,26 @@ class ManageSiteSettings extends Page
                     TextInput::make("{$p}.projects_subtitle")->default('PROJECTS'),
                     TextInput::make("{$p}.projects_title")->columnSpanFull(),
                     TextInput::make("{$p}.projects_video_url"),
+                    FileUpload::make("{$p}.projects_bg_image")
+                        ->label('Projects Section Banner Background')
+                        ->image()
+                        ->directory('home/projects')
+                        ->disk('public')
+                        ->helperText('project-section-3 ka top/section background — empty = default testimonial/bg.jpg')
+                        ->columnSpanFull(),
                 ]),
             Section::make('Team / Testimonials / Blog titles')
                 ->columns(2)
                 ->schema([
                     TextInput::make("{$p}.team_subtitle")->default('Team Members'),
                     TextInput::make("{$p}.team_title")->columnSpanFull(),
+                    FileUpload::make("{$p}.team_bg_image")
+                        ->label('Team Section Banner Background')
+                        ->image()
+                        ->directory('home/team')
+                        ->disk('public')
+                        ->helperText('team-section-3 background — empty = default section background color')
+                        ->columnSpanFull(),
                     TextInput::make("{$p}.testimonial_subtitle")->default('Testimonials'),
                     TextInput::make("{$p}.testimonial_title")->columnSpanFull(),
                     TextInput::make("{$p}.blog_subtitle")->default('Latest Blog'),

@@ -145,9 +145,7 @@ class SiteSetting extends Model
     public function resolveBanner(?string $individualBanner = null): string
     {
         if (filled($individualBanner)) {
-            return str_starts_with($individualBanner, 'http') || str_starts_with($individualBanner, '/')
-                ? $individualBanner
-                : asset('storage/'.$individualBanner);
+            return static::mediaUrl($individualBanner, $this->defaultBannerUrl());
         }
 
         return $this->defaultBannerUrl();
