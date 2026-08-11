@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Filament\Forms\SeoForm;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -46,7 +47,10 @@ class PageForm
                                         ->directory('pages')
                                         ->disk('public')
                                         ->helperText('Empty = Site Settings default banner'),
-                                    Textarea::make('content')->rows(8)->columnSpanFull()->helperText('Contact page pe ye form ke neeche intro text banega'),
+                                    RichEditor::make('content')
+                                        ->label('Page Content')
+                                        ->columnSpanFull()
+                                        ->helperText('This content shows on the frontend page (About, Contact intro, etc.)'),
                                     Toggle::make('is_published')->default(true),
                                     TextInput::make('sort_order')->numeric()->default(0),
                                 ]),

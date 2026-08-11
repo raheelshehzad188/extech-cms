@@ -60,8 +60,16 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
     <style>
+        @php
+            $bodyTextColor = $settings->color_body ?: '#445375';
+            $normalizedBody = strtolower(ltrim(trim((string) $bodyTextColor), '#'));
+            // White/near-white body text on light pages looks "empty" — fall back to readable text color.
+            if (in_array($normalizedBody, ['fff', 'ffffff', 'fefefe', 'fafafa', 'f8f8f8', 'f5f5f5'], true)) {
+                $bodyTextColor = $settings->color_text ?: '#445375';
+            }
+        @endphp
         :root {
-            --body: {{ $settings->color_body }};
+            --body: {{ $bodyTextColor }};
             --theme: {{ $settings->color_theme }};
             --theme2: {{ $settings->color_theme2 }};
             --theme-color3: {{ $settings->color_theme3 }};
@@ -71,13 +79,34 @@
             --bg: {{ $settings->color_bg }};
             --bg2: {{ $settings->color_theme2 }};
             --title-color: {{ $settings->color_title }};
-            --body-color: {{ $settings->color_body }};
+            --body-color: {{ $bodyTextColor }};
+            --text-color: {{ $settings->color_text ?: '#445375' }};
             --smoke-color: {{ $settings->color_bg }};
             --title-font: "{{ $settings->font_title }}", sans-serif;
             --body-font: "{{ $settings->font_body }}", sans-serif;
         }
-        body { font-family: var(--body-font); }
+        body { font-family: var(--body-font); color: var(--body-color); }
         h1,h2,h3,h4,h5,h6 { font-family: var(--title-font); }
+
+        .cms-page-content {
+            color: var(--text-color, #445375);
+            line-height: 1.75;
+            font-size: 16px;
+        }
+        .cms-page-content p { margin-bottom: 1rem; }
+        .cms-page-content h1,
+        .cms-page-content h2,
+        .cms-page-content h3,
+        .cms-page-content h4,
+        .cms-page-content h5,
+        .cms-page-content h6 {
+            color: var(--title-color, #0F0D1D);
+            margin-bottom: .75rem;
+        }
+        .about-page-section > .container > .row > [class*="col-"] > h2 {
+            color: var(--title-color, #0F0D1D);
+        }
+
 
         /* Mobile header controls must stay clickable above decorative layers */
         .header-3 .header-main,

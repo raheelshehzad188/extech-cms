@@ -39,12 +39,19 @@ class FrontendController extends Controller
 
     public function about(): View
     {
-        $page = Page::query()->where('slug', 'about')->where('is_published', true)->first();
+        $page = Page::query()->where('slug', 'about')->first()
+            ?? new Page([
+                'title' => 'About Us',
+                'breadcrumb_title' => 'About Us',
+                'content' => '',
+                'template' => 'about',
+                'is_published' => true,
+            ]);
 
         return view('frontend.pages.about', [
             'page' => $page,
             'team' => TeamMember::query()->where('is_published', true)->orderBy('sort_order')->take(4)->get(),
-            'seo' => $page ?? SiteSetting::current(),
+            'seo' => $page->exists ? $page : SiteSetting::current(),
         ]);
     }
 
