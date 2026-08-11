@@ -262,8 +262,8 @@
                             @endif
                             <h4><a href="{{ route('services.show', $service) }}">{{ $service->title }}</a></h4>
                             <p>{{ $service->short_description }}</p>
-                            <a href="{{ route('services.show', $service) }}" class="theme-btn-2 mt-3">
-                                read More <i class="fa-solid fa-arrow-right-long"></i>
+                            <a href="{{ route('quote', $service) }}" class="theme-btn-2 mt-3">
+                                Get A Quote <i class="fa-solid fa-arrow-right-long"></i>
                             </a>
                         </div>
                     </div>
@@ -286,7 +286,7 @@
                         </h4>
                     </div>
                 </div>
-                <a href="{{ route('contact') }}" class="theme-btn bg-white">
+                <a href="{{ route('quote') }}" class="theme-btn bg-white">
                     {{ $settings->header_cta_text ?: 'get A Quote' }}
                     <i class="fa-solid fa-arrow-right-long"></i>
                 </a>

@@ -140,7 +140,7 @@
                     </div>
 
                     <div class="col-xl-3 col-md-6 col-12">
-                        <div class="widget widget_nav_menu footer-widget wow fadeInUp" data-wow-delay="1.6s">
+                        <div class="widget widget_nav_menu footer-widget wow fadeInUp" data-wow-delay="1.6s" id="newsletter">
                             <h3 class="widget_title">Contact Us</h3>
                             <div class="checklist style2">
                                 <ul class="ps-0">
@@ -151,18 +151,39 @@
                                     <li class="text-white"><i class="fa-solid fa-phone"></i></li>
                                     <li class="text-white">{{ $settings->phone ?: '+208-6666-0112' }}</li>
                                 </ul>
-                                <div class="email-input-container">
-                                    <input type="email" id="email" placeholder="Your email address" required>
-                                    <button type="submit" id="submitButton" disabled>
-                                        <i class="fa-regular fa-arrow-right-long"></i>
-                                    </button>
-                                </div>
-                                <form id="termsForm">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" name="agree" id="agreeCheckbox">
+
+                                @if(session('newsletter_success'))
+                                    <div class="alert alert-success py-2 px-3 mb-2" style="font-size:14px;">
+                                        {{ session('newsletter_success') }}
+                                    </div>
+                                @endif
+                                @if(session('newsletter_error'))
+                                    <div class="alert alert-danger py-2 px-3 mb-2" style="font-size:14px;">
+                                        {{ session('newsletter_error') }}
+                                    </div>
+                                @endif
+                                <div id="newsletter-message" class="mb-2" style="display:none;font-size:14px;"></div>
+
+                                <form action="{{ route('newsletter.subscribe') }}" method="POST" id="newsletterForm" novalidate>
+                                    @csrf
+                                    <input type="hidden" name="source" value="footer">
+                                    <div class="email-input-container">
+                                        <input type="email" name="email" id="newsletterEmail" placeholder="Your email address" value="{{ old('email') }}" required autocomplete="email">
+                                        <button type="submit" id="submitButton" disabled aria-label="Subscribe to newsletter">
+                                            <i class="fa-regular fa-arrow-right-long"></i>
+                                        </button>
+                                    </div>
+                                    <label class="custom-checkbox mt-2">
+                                        <input type="checkbox" name="agree" id="agreeCheckbox" value="1" {{ old('agree') ? 'checked' : '' }}>
                                         <span class="checkmark"></span>
                                         I agree to the <a class="text-underline" href="{{ route('contact') }}" target="_blank">Privacy Policy.</a>
                                     </label>
+                                    @error('email')
+                                        <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                    @enderror
+                                    @error('agree')
+                                        <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                    @enderror
                                 </form>
                             </div>
                         </div>

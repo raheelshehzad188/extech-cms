@@ -20,13 +20,26 @@ class PricingPlanForm
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')->required()->maxLength(120),
-                        TextInput::make('monthly_price')->label('Monthly Price')->placeholder('$49')->required(),
-                        TextInput::make('yearly_price')->label('Yearly Price')->placeholder('$399')->required(),
-                        TextInput::make('monthly_suffix')->default('/ Month'),
-                        TextInput::make('yearly_suffix')->default('/ Year'),
+                        TextInput::make('monthly_price')
+                            ->label('One-Time Package Price')
+                            ->placeholder('$649')
+                            ->required()
+                            ->helperText('Single one-time charge (not monthly/yearly).'),
+                        TextInput::make('monthly_suffix')
+                            ->label('Price Label')
+                            ->default('One Time')
+                            ->helperText('Shown next to price, e.g. One Time'),
+                        TextInput::make('yearly_price')
+                            ->label('Legacy Yearly Price (unused)')
+                            ->hidden()
+                            ->dehydrated(false),
+                        TextInput::make('yearly_suffix')->hidden()->dehydrated(false),
                         FileUpload::make('icon')->image()->directory('pricing')->disk('public'),
-                        TextInput::make('button_text')->default('Get Started Now'),
-                        TextInput::make('button_url')->default('/contact')->columnSpanFull(),
+                        TextInput::make('button_text')->default('Buy Now'),
+                        TextInput::make('button_url')
+                            ->label('Custom Button URL (optional)')
+                            ->helperText('Leave empty to open Plan Subscribe form.')
+                            ->columnSpanFull(),
                         Select::make('card_style')
                             ->options([
                                 'style1' => 'Default (style1)',

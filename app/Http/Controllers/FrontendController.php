@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuoteRequestMail;
 use App\Models\Brand;
 use App\Models\Faq;
 use App\Models\Page;
@@ -12,6 +13,7 @@ use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class FrontendController extends Controller
@@ -27,9 +29,9 @@ class FrontendController extends Controller
             'services' => Service::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'pricingPlans' => PricingPlan::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'brands' => Brand::query()->where('is_published', true)->orderBy('sort_order')->get(),
-            'team' => TeamMember::query()->where('is_published', true)->orderBy('sort_order')->take(4)->get(),
+            'team' => TeamMember::query()->where('is_published', true)->orderBy('sort_order')->take(8)->get(),
             'projects' => Project::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
-            'posts' => Post::query()->where('is_published', true)->orderByDesc('published_at')->take(3)->get(),
+            'posts' => Post::query()->where('is_published', true)->orderByDesc('published_at')->take(6)->get(),
             'faqs' => Faq::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'seo' => $settings,
         ]);
@@ -171,6 +173,66 @@ class FrontendController extends Controller
 
         // Store or mail later — for now flash success
         return back()->with('success', 'Thank you! Your message has been received.');
+    }
+
+    public function quote(Request $request, ?Service $service = null): View
+    {
+        if ($service && ! $service->is_published) {
+            abort(404);
+        }
+
+        $selectedPlan = null;
+        if ($request->filled('plan')) {
+            $selectedPlan = PricingPlan::query()
+                ->where('is_published', true)
+                ->where(function ($query) use ($request) {
+                    $query->where('id', $request->integer('plan'))
+                        ->orWhere('name', $request->string('plan')->toString());
+                })
+                ->first();
+        }
+
+        return view('frontend.pages.quote', [
+            'services' => Service::query()->where('is_published', true)->orderBy('sort_order')->get(),
+            'plans' => PricingPlan::query()->where('is_published', true)->orderBy('sort_order')->get(),
+            'selectedService' => $service,
+            'selectedPlan' => $selectedPlan,
+            'seo' => $this->pageSeo('quote', 'Get A Quote'),
+        ]);
+    }
+
+    public function quoteSubmit(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:120',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:40',
+            'service_id' => 'required|exists:services,id',
+            'plan_id' => 'nullable|exists:pricing_plans,id',
+            'message' => 'required|string|max:5000',
+        ]);
+
+        $service = Service::query()->where('is_published', true)->findOrFail($data['service_id']);
+        $plan = ! empty($data['plan_id'])
+            ? PricingPlan::query()->where('is_published', true)->find($data['plan_id'])
+            : null;
+
+        $settings = SiteSetting::current();
+        $to = $settings->email ?: config('mail.from.address');
+
+        try {
+            Mail::to($to)->send(new QuoteRequestMail($data, $service, $plan));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Quote request saved locally but email could not be sent. Please check mail settings.');
+        }
+
+        return redirect()
+            ->route('quote')
+            ->with('success', 'Thank you! Your quote request for "'.$service->title.'" has been sent.');
     }
 
     protected function pageSeo(string $slug, string $fallbackTitle)

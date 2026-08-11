@@ -4,6 +4,9 @@ namespace App\Filament\Pages;
 
 use App\Filament\Forms\SeoForm;
 use App\Models\SiteSetting;
+use App\Support\BrandDefaults;
+use App\Support\Home1Defaults;
+use App\Support\PricingDefaults;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
@@ -48,6 +51,35 @@ class ManageSiteSettings extends Page
     {
         $settings = SiteSetting::current();
         $this->form->fill($settings->attributesToArray());
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('fillHome1Defaults')
+                ->label('Set Default Data (Home 1)')
+                ->icon('heroicon-o-sparkles')
+                ->color('warning')
+                ->requiresConfirmation()
+                ->modalHeading('Home 01 — Set Default Data')
+                ->modalDescription('DB manually edit ki zarurat nahi. Texts, images, brands fill ho jayenge aur Home 01 active ho jayegi.')
+                ->action(fn () => $this->fillHome1DefaultData()),
+        ];
+    }
+
+    public function fillHome1DefaultData(): void
+    {
+        Home1Defaults::apply(switchTemplate: true);
+        BrandDefaults::apply(replaceExisting: true);
+        PricingDefaults::apply(replaceExisting: false);
+
+        $this->form->fill(SiteSetting::current()->attributesToArray());
+
+        Notification::make()
+            ->title('Home 1 default data set')
+            ->body('Images + texts filled. Template switched to Home 01.')
+            ->success()
+            ->send();
     }
 
     public function defaultForm(Schema $schema): Schema
@@ -106,7 +138,7 @@ class ManageSiteSettings extends Page
                                             ])
                                             ->required()
                                             ->native(false)
-                                            ->helperText('Admin se choose karein kaunsa home page live dikhe'),
+                                            ->helperText('Home 01 fill: open “Home 1 Content” tab → click Set Default Data (DB manually edit ki zarurat nahi)'),
                                     ]),
                             ]),
                         Tab::make('Colors & Fonts')
@@ -170,7 +202,23 @@ class ManageSiteSettings extends Page
                                     ]),
                             ]),
                         Tab::make('Home 1 Content')
-                            ->schema(self::homeContentFields('home_1_content')),
+                            ->schema([
+                                Section::make('Quick Setup')
+                                    ->description('DB change ki zarurat nahi. Ek click pe Home 01 ka pura dummy content + images set ho jayega.')
+                                    ->schema([
+                                        Actions::make([
+                                            Action::make('setHome1DefaultsInTab')
+                                                ->label('Set Default Data')
+                                                ->icon('heroicon-o-sparkles')
+                                                ->color('warning')
+                                                ->requiresConfirmation()
+                                                ->modalHeading('Home 01 — Set Default Data?')
+                                                ->modalDescription('Saari Home 1 texts/images fill hongi, brands update hongi, aur active template Home 01 ban jayegi.')
+                                                ->action(fn () => $this->fillHome1DefaultData()),
+                                        ]),
+                                    ]),
+                                ...self::homeContentFields('home_1_content'),
+                            ]),
                         Tab::make('Home 2 Content')
                             ->schema(self::homeContentFields('home_2_content')),
                         Tab::make('Home 3 Content')
@@ -250,11 +298,8 @@ class ManageSiteSettings extends Page
                 ->schema([
                     TextInput::make("{$p}.pricing_subtitle")->default('Our Pricing'),
                     TextInput::make("{$p}.pricing_title")->default('Our Awesome Pricing Plans')->columnSpanFull(),
-                    TextInput::make("{$p}.pricing_monthly_label")->default('Monthly'),
-                    TextInput::make("{$p}.pricing_yearly_label")->default('Yearly'),
-                    TextInput::make("{$p}.pricing_save_text")->default('Save 25%'),
                 ])
-                ->description('Plans manage karein: Website → Pricing Plans'),
+                ->description('One-time packages. Manage plans: Website → Pricing Plans'),
             Section::make('Work Process')
                 ->schema([
                     TextInput::make("{$p}.process_subtitle")->default('How IT work'),
@@ -344,11 +389,8 @@ class ManageSiteSettings extends Page
                 ->schema([
                     TextInput::make("{$prefix}.pricing_subtitle")->label('Subtitle')->default('Our Pricing'),
                     TextInput::make("{$prefix}.pricing_title")->label('Title')->default('Our Awesome Pricing Plans')->columnSpanFull(),
-                    TextInput::make("{$prefix}.pricing_monthly_label")->label('Monthly Tab')->default('Monthly'),
-                    TextInput::make("{$prefix}.pricing_yearly_label")->label('Yearly Tab')->default('Yearly'),
-                    TextInput::make("{$prefix}.pricing_save_text")->label('Save Badge')->default('Save 25%'),
                 ])
-                ->description('Plans manage karein: Website → Pricing Plans'),
+                ->description('One-time packages. Manage plans: Website → Pricing Plans'),
             Section::make('CTA / Extra Texts')
                 ->columns(2)
                 ->schema([

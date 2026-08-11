@@ -723,13 +723,69 @@ Js TABLE OF CONTENTS
         });
 
 
-        //>> Checkbox <<//      
+        //>> Newsletter subscribe <<//
         const checkbox = $('#agreeCheckbox');
         const submitButton = $('#submitButton');
+        const newsletterForm = $('#newsletterForm');
 
         if (checkbox.length && submitButton.length) {
-            checkbox.on('change', function () {
-                submitButton.prop('disabled', !this.checked);
+            const syncNewsletterButton = function () {
+                submitButton.prop('disabled', !checkbox.is(':checked') || submitButton.data('loading') === true);
+            };
+
+            checkbox.on('change', syncNewsletterButton);
+            syncNewsletterButton();
+        }
+
+        if (newsletterForm.length) {
+            newsletterForm.on('submit', function (e) {
+                e.preventDefault();
+
+                if (!checkbox.is(':checked')) {
+                    return;
+                }
+
+                const form = $(this);
+                const messageBox = $('#newsletter-message');
+                const emailInput = $('#newsletterEmail');
+
+                submitButton.data('loading', true).prop('disabled', true);
+                messageBox.hide().removeClass('alert alert-success alert-danger');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    success: function (response) {
+                        messageBox
+                            .addClass('alert alert-success py-2 px-3')
+                            .text(response.message || 'Subscribed successfully.')
+                            .show();
+                        emailInput.val('');
+                        checkbox.prop('checked', false);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = 'Unable to subscribe right now. Please try again.';
+                        if (xhr.responseJSON?.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseJSON?.errors) {
+                            const firstKey = Object.keys(xhr.responseJSON.errors)[0];
+                            errorMessage = xhr.responseJSON.errors[firstKey][0];
+                        }
+                        messageBox
+                            .addClass('alert alert-danger py-2 px-3')
+                            .text(errorMessage)
+                            .show();
+                    },
+                    complete: function () {
+                        submitButton.data('loading', false);
+                        submitButton.prop('disabled', !checkbox.is(':checked'));
+                    }
+                });
             });
         }
 

@@ -31,6 +31,9 @@
                             </li>
                         @endforeach
                     </ul>
+                    <a href="{{ route('quote', $service) }}" class="theme-btn mt-4" style="display:inline-block;">
+                        Get A Quote <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
                 </div>
             </div>
         </div>

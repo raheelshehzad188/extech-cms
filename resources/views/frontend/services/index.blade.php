@@ -12,7 +12,7 @@
                         @endif
                         <h3><a href="{{ route('services.show', $service) }}">{{ $service->title }}</a></h3>
                         <p>{{ $service->short_description }}</p>
-                        <a href="{{ route('services.show', $service) }}" style="color:var(--theme);">Read More →</a>
+                        <a href="{{ route('quote', $service) }}" style="color:var(--theme);">Get A Quote →</a>
                     </div>
                 </div>
             @endforeach

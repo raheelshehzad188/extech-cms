@@ -16,8 +16,8 @@ class PricingPlansTable
         return $table
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('monthly_price')->label('Monthly'),
-                TextColumn::make('yearly_price')->label('Yearly'),
+                TextColumn::make('monthly_price')->label('One-Time Price'),
+                TextColumn::make('monthly_suffix')->label('Label')->toggleable(),
                 IconColumn::make('is_highlighted')->boolean()->label('Highlighted'),
                 IconColumn::make('is_published')->boolean(),
                 TextColumn::make('sort_order')->sortable(),

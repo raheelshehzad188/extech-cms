@@ -64,4 +64,31 @@ class PricingPlan extends Model
             ? 'gt-btn style3 w-100'
             : 'gt-btn style2 w-100';
     }
+
+    /**
+     * One-time package price (legacy monthly_price column).
+     */
+    public function displayPrice(): string
+    {
+        return (string) ($this->monthly_price ?: $this->yearly_price ?: '');
+    }
+
+    /**
+     * One-time label shown next to price.
+     */
+    public function displaySuffix(): string
+    {
+        $suffix = trim((string) ($this->monthly_suffix ?: ''));
+
+        if ($suffix === '' || preg_match('/month|year/i', $suffix)) {
+            return 'One Time';
+        }
+
+        return $suffix;
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
 }

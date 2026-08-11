@@ -68,7 +68,7 @@
                             </div>
                             <a href="#0" class="search-trigger search-icon"><i class="fal fa-search"></i></a>
                             <div class="header-button">
-                                <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="theme-btn bg-white">
+                                <a href="{{ $settings->headerCtaUrl() }}" class="theme-btn bg-white">
                                     <span>
                                         {{ $settings->header_cta_text ?: 'get A Quote' }}
                                         <i class="fa-solid fa-arrow-right-long"></i>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="header-right d-flex justify-content-end align-items-center">
                             <div class="header-button ms-4">
-                                <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="gt-btn">
+                                <a href="{{ $settings->headerCtaUrl() }}" class="gt-btn">
                                     <span>
                                         {{ $settings->header_cta_text ?: 'Get A Quote' }}
                                         <i class="fa-solid fa-arrow-right-long"></i>

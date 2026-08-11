@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'linkedin' => 'https://linkedin.com',
             'youtube' => 'https://youtube.com',
             'header_cta_text' => 'Get A Quote',
-            'header_cta_url' => '/contact',
+            'header_cta_url' => '/quote',
             'offcanvas_text' => 'We deliver innovative IT solutions for modern businesses.',
             'footer_about' => 'Extech is a technology company providing IT services, digital transformation and software solutions.',
             'footer_copyright' => '© '.date('Y').' Extech. All Rights Reserved.',

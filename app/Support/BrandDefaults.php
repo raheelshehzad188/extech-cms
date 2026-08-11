@@ -14,11 +14,11 @@ class BrandDefaults
     public static function brandSources(): array
     {
         return [
-            ['name' => 'Brand 01', 'source' => 'assets/img/brand/01.png', 'file' => 'brand-01.png', 'sort_order' => 1],
-            ['name' => 'Brand 02', 'source' => 'assets/img/brand/02.png', 'file' => 'brand-02.png', 'sort_order' => 2],
-            ['name' => 'Brand 03', 'source' => 'assets/img/brand/03.png', 'file' => 'brand-03.png', 'sort_order' => 3],
-            ['name' => 'Brand 04', 'source' => 'assets/img/brand/04.png', 'file' => 'brand-04.png', 'sort_order' => 4],
-            ['name' => 'Brand Trust', 'source' => 'assets/img/brand.png', 'file' => 'brand-trust.png', 'sort_order' => 5],
+            ['name' => 'Brand Logo 1', 'source' => 'assets/img/brand-logo/brandLogo1_1.svg', 'file' => 'brandLogo1_1.svg', 'sort_order' => 1],
+            ['name' => 'Brand Logo 2', 'source' => 'assets/img/brand-logo/brandLogo1_2.svg', 'file' => 'brandLogo1_2.svg', 'sort_order' => 2],
+            ['name' => 'Brand Logo 3', 'source' => 'assets/img/brand-logo/brandLogo1_3.svg', 'file' => 'brandLogo1_3.svg', 'sort_order' => 3],
+            ['name' => 'Brand Logo 4', 'source' => 'assets/img/brand-logo/brandLogo1_4.svg', 'file' => 'brandLogo1_4.svg', 'sort_order' => 4],
+            ['name' => 'Brand Logo 5', 'source' => 'assets/img/brand-logo/brandLogo1_5.svg', 'file' => 'brandLogo1_5.svg', 'sort_order' => 5],
         ];
     }
 

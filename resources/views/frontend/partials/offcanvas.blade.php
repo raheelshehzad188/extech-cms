@@ -68,7 +68,7 @@
                     </ul>
 
                     <div class="header-button mt-4">
-                        <a href="{{ $settings->header_cta_url ?: route('contact') }}" class="theme-btn text-center">
+                        <a href="{{ $settings->headerCtaUrl() }}" class="theme-btn text-center">
                             <span>
                                 {{ $settings->header_cta_text ?: 'get A Quote' }}
                                 <i class="fa-solid fa-arrow-right-long"></i>

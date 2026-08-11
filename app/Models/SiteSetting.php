@@ -83,6 +83,24 @@ class SiteSetting extends Model
             : asset('assets/img/logo.svg');
     }
 
+    /**
+     * Header "Get A Quote" CTA. Legacy /contact defaults go to the quote form.
+     */
+    public function headerCtaUrl(): string
+    {
+        $url = trim((string) $this->header_cta_url);
+
+        if ($url === '' || in_array(trim($url, '/'), ['contact'], true)) {
+            return route('quote');
+        }
+
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+
+        return url($url);
+    }
+
     public function faviconUrl(): string
     {
         return $this->favicon
