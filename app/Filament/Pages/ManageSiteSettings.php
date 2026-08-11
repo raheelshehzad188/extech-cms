@@ -234,7 +234,8 @@ class ManageSiteSettings extends Page
             Section::make('Brand Strip')
                 ->schema([
                     TextInput::make("{$p}.brand_text")->default('1k + Brands Trust Us'),
-                ]),
+                ])
+                ->description('Brand logos manage karein: Website → Brands'),
             Section::make('Services Block')
                 ->columns(2)
                 ->schema([

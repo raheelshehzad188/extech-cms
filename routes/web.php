@@ -16,4 +16,7 @@ Route::get('/projects/{project:slug}', [FrontendController::class, 'projectShow'
 Route::get('/blog', [FrontendController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{post:slug}', [FrontendController::class, 'blogShow'])->name('blog.show');
 Route::get('/faq', [FrontendController::class, 'faq'])->name('faq');
-Route::get('/page/{page:slug}', [FrontendController::class, 'page'])->name('pages.show');
+Route::get('/page/{page:slug}', [FrontendController::class, 'page'])->name('pages.show.prefixed');
+Route::get('/{page:slug}', [FrontendController::class, 'page'])
+    ->where('page', '^(?!admin|livewire|storage|assets|build|vendor|filament).*$')
+    ->name('pages.show');

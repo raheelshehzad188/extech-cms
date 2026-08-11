@@ -48,7 +48,24 @@ class TeamMemberForm
                                     TextInput::make('twitter')->url(),
                                     TextInput::make('linkedin')->url(),
                                     TextInput::make('instagram')->url(),
-                                    Repeater::make('skills')->simple(TextInput::make('skill'))->columnSpanFull(),
+                                    Repeater::make('skills')
+                                        ->schema([
+                                            TextInput::make('name')
+                                                ->label('Skill')
+                                                ->required()
+                                                ->columnSpan(2),
+                                            TextInput::make('percent')
+                                                ->label('Percent')
+                                                ->numeric()
+                                                ->minValue(1)
+                                                ->maxValue(100)
+                                                ->default(90)
+                                                ->suffix('%'),
+                                        ])
+                                        ->columns(3)
+                                        ->reorderable()
+                                        ->defaultItems(0)
+                                        ->columnSpanFull(),
                                     Toggle::make('is_featured'),
                                     Toggle::make('is_published')->default(true),
                                     TextInput::make('sort_order')->numeric()->default(0),

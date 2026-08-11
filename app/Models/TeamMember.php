@@ -39,4 +39,35 @@ class TeamMember extends Model
     {
         return $this->image ? asset('storage/'.$this->image) : asset('assets/img/team/01.jpg');
     }
+
+    /**
+     * @return array<int, array{name: string, percent: int}>
+     */
+    public function skillList(): array
+    {
+        return collect($this->skills ?? [])
+            ->map(function ($skill, $index) {
+                if (is_string($skill)) {
+                    return [
+                        'name' => $skill,
+                        'percent' => 90 - min(20, $index * 5),
+                    ];
+                }
+
+                $name = (string) ($skill['name'] ?? $skill['skill'] ?? $skill['title'] ?? '');
+                if ($name === '') {
+                    return null;
+                }
+
+                $percent = (int) ($skill['percent'] ?? $skill['point'] ?? (90 - min(20, $index * 5)));
+
+                return [
+                    'name' => $name,
+                    'percent' => max(1, min(100, $percent)),
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Faq;
 use App\Models\Page;
 use App\Models\Post;
@@ -25,6 +26,7 @@ class FrontendController extends Controller
             'home' => $home,
             'services' => Service::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'pricingPlans' => PricingPlan::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
+            'brands' => Brand::query()->where('is_published', true)->orderBy('sort_order')->get(),
             'team' => TeamMember::query()->where('is_published', true)->orderBy('sort_order')->take(4)->get(),
             'projects' => Project::query()->where('is_published', true)->orderBy('sort_order')->take(6)->get(),
             'posts' => Post::query()->where('is_published', true)->orderByDesc('published_at')->take(3)->get(),

@@ -75,13 +75,18 @@ Js TABLE OF CONTENTS
         }
 
         //>> Sidebar Toggle Js Start <<//
-        $(".offcanvas__close,.offcanvas__overlay").on("click", function () {
+        $(document).on("click", ".offcanvas__close, .offcanvas__close button, .offcanvas__overlay", function (e) {
+            e.preventDefault();
             $(".offcanvas__info").removeClass("info-open");
             $(".offcanvas__overlay").removeClass("overlay-open");
+            $("body").removeClass("overflow-hidden");
         });
-        $(".sidebar__toggle").on("click", function () {
+        $(document).on("click", ".sidebar__toggle, .header__hamburger", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             $(".offcanvas__info").addClass("info-open");
             $(".offcanvas__overlay").addClass("overlay-open");
+            $("body").addClass("overflow-hidden");
         });
 
         //>> Body Overlay Js Start <<//
@@ -519,28 +524,28 @@ Js TABLE OF CONTENTS
         const $navSearch = $(".nav-search");
         const $searchClose = $("#search-close");
 
-        $(".search-trigger").on("click", function (e) {
+        $(document).on("click", ".search-trigger", function (e) {
             e.preventDefault();
-            $searchWrap.animate({ opacity: "toggle" }, 500);
+            e.stopPropagation();
+            $searchWrap.stop(true, true).fadeIn(300);
             $navSearch.add($searchClose).addClass("open");
         });
 
-        $(".search-close").on("click", function (e) {
+        $(document).on("click", ".search-close, #search-close", function (e) {
             e.preventDefault();
-            $searchWrap.animate({ opacity: "toggle" }, 500);
+            e.stopPropagation();
+            $searchWrap.stop(true, true).fadeOut(200);
             $navSearch.add($searchClose).removeClass("open");
         });
 
-        function closeSearch() {
-            $searchWrap.fadeOut(200);
-            $navSearch.add($searchClose).removeClass("open");
-        }
-
-        $(document.body).on("click", function (e) {
-            closeSearch();
+        $(document.body).on("click", function () {
+            if ($searchWrap.is(":visible")) {
+                $searchWrap.stop(true, true).fadeOut(200);
+                $navSearch.add($searchClose).removeClass("open");
+            }
         });
 
-        $(".search-trigger, .main-search-input").on("click", function (e) {
+        $(document).on("click", ".search-wrap, .main-search-input", function (e) {
             e.stopPropagation();
         });
 

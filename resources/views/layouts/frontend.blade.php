@@ -77,6 +77,34 @@
         }
         body { font-family: var(--body-font); }
         h1,h2,h3,h4,h5,h6 { font-family: var(--title-font); }
+
+        /* Mobile header controls must stay clickable above decorative layers */
+        .header-3 .header-main,
+        .header-3 .header-right {
+            position: relative;
+            z-index: 20;
+        }
+        .header-3 .search-icon,
+        .header-3 .header__hamburger,
+        .header-3 .sidebar__toggle {
+            position: relative;
+            z-index: 30;
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+        .search-wrap {
+            display: none;
+        }
+        @media (max-width: 991px) {
+            .mean-container .mean-bar,
+            .mean-container .mean-nav,
+            a.meanmenu-reveal {
+                display: none !important; /* custom offcanvas hamburger */
+            }
+            .header-3 .header__hamburger {
+                display: block !important;
+            }
+        }
     </style>
 
     @if(!empty($seoModel->schema_markup))
@@ -92,7 +120,9 @@
     {!! $settings->custom_body_code !!}
 
     @include('frontend.partials.preloader')
+    @include('frontend.partials.offcanvas')
     @include('frontend.partials.header')
+    @include('frontend.partials.search')
 
     @yield('content')
 

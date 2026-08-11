@@ -198,24 +198,32 @@
 </section>
 
 {{-- Brand --}}
+@if(($brands ?? collect())->isNotEmpty())
 <div class="brand-section fix section-padding pt-0">
     <div class="container">
         <div class="brand-wrapper">
             <h6 class="text-center wow fadeInUp" data-wow-delay=".3s">{{ $home['brand_text'] ?? '1k + Brands Trust Us' }}</h6>
             <div class="swiper brand-slider">
                 <div class="swiper-wrapper">
-                    @for($i = 0; $i < 5; $i++)
+                    @foreach($brands as $brand)
                         <div class="swiper-slide">
                             <div class="brand-image">
-                                <img src="{{ asset('assets/img/brand.png') }}" alt="brand-img">
+                                @if($brand->url)
+                                    <a href="{{ $brand->url }}" target="_blank" rel="noopener">
+                                        <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}">
+                                    </a>
+                                @else
+                                    <img src="{{ $brand->logoUrl() }}" alt="{{ $brand->name }}">
+                                @endif
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endif
 
 {{-- Services --}}
 <section class="service-section-3 pb-0 fix section-padding bg-cover"
