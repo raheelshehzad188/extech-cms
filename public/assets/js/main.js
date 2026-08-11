@@ -723,29 +723,28 @@ Js TABLE OF CONTENTS
         });
 
 
-        //>> Newsletter subscribe <<//
+        //>> Newsletter subscribe (AJAX + DB + SweetAlert) <<//
         const newsletterForm = $('#newsletterForm');
 
         if (newsletterForm.length) {
             const checkbox = newsletterForm.find('#agreeCheckbox');
             const submitButton = newsletterForm.find('#submitButton');
-            const emailInput = newsletterForm.find('#email');
-            const messageBox = $('#newsletter-message');
+            const emailInput = newsletterForm.find('#email, #newsletterEmail').first();
             const csrfToken = $('meta[name="csrf-token"]').attr('content')
                 || newsletterForm.find('input[name="_token"]').val();
 
-            const showNewsletterMessage = function (type, text) {
-                messageBox
-                    .removeClass('alert alert-success alert-danger')
-                    .addClass('alert alert-' + type + ' py-2 px-3')
-                    .css({
-                        display: 'block',
-                        color: type === 'success' ? '#0f5132' : '#842029',
-                        background: type === 'success' ? '#d1e7dd' : '#f8d7da',
-                        borderRadius: '6px'
-                    })
-                    .text(text)
-                    .show();
+            const notifyNewsletter = function (type, title, text) {
+                if (typeof Swal !== 'undefined' && Swal.fire) {
+                    Swal.fire({
+                        icon: type,
+                        title: title,
+                        text: text,
+                        confirmButtonColor: type === 'success' ? '#3C72FC' : '#d33'
+                    });
+                    return;
+                }
+
+                window.alert(text);
             };
 
             const setNewsletterLoading = function (loading) {
@@ -759,13 +758,13 @@ Js TABLE OF CONTENTS
                 const email = $.trim(emailInput.val() || '');
 
                 if (!email) {
-                    showNewsletterMessage('danger', 'Please enter your email address.');
+                    notifyNewsletter('error', 'Email required', 'Please enter your email address.');
                     emailInput.trigger('focus');
                     return;
                 }
 
                 if (!checkbox.is(':checked')) {
-                    showNewsletterMessage('danger', 'Please agree to the Privacy Policy before subscribing.');
+                    notifyNewsletter('error', 'Agreement required', 'Please agree to the Privacy Policy before subscribing.');
                     return;
                 }
 
@@ -782,9 +781,11 @@ Js TABLE OF CONTENTS
                         'X-CSRF-TOKEN': csrfToken
                     },
                     success: function (response) {
-                        showNewsletterMessage('success', (response && response.message)
-                            ? response.message
-                            : 'Subscribed successfully.');
+                        notifyNewsletter(
+                            'success',
+                            'Subscribed!',
+                            (response && response.message) ? response.message : 'You have successfully subscribed to our newsletter.'
+                        );
                         emailInput.val('');
                         checkbox.prop('checked', false);
                     },
@@ -803,7 +804,7 @@ Js TABLE OF CONTENTS
                             errorMessage = 'Session expired. Please refresh the page and try again.';
                         }
 
-                        showNewsletterMessage('danger', errorMessage);
+                        notifyNewsletter('error', 'Subscription failed', errorMessage);
                     },
                     complete: function () {
                         setNewsletterLoading(false);

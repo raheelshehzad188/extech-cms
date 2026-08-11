@@ -152,18 +152,6 @@
                                     <li class="text-white">{{ $settings->phone ?: '+208-6666-0112' }}</li>
                                 </ul>
 
-                                @if(session('newsletter_success'))
-                                    <div class="alert alert-success py-2 px-3 mb-2" style="font-size:14px;">
-                                        {{ session('newsletter_success') }}
-                                    </div>
-                                @endif
-                                @if(session('newsletter_error'))
-                                    <div class="alert alert-danger py-2 px-3 mb-2" style="font-size:14px;">
-                                        {{ session('newsletter_error') }}
-                                    </div>
-                                @endif
-                                <div id="newsletter-message" class="mb-2" style="display:none;font-size:14px;"></div>
-
                                 <form action="{{ route('newsletter.subscribe') }}" method="POST" id="newsletterForm" novalidate>
                                     @csrf
                                     <input type="hidden" name="source" value="footer">
@@ -178,12 +166,6 @@
                                         <span class="checkmark"></span>
                                         I agree to the <a class="text-underline" href="{{ route('contact') }}" target="_blank" rel="noopener">Privacy Policy.</a>
                                     </label>
-                                    @error('email')
-                                        <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                    @enderror
-                                    @error('agree')
-                                        <small class="text-danger d-block mt-1">{{ $message }}</small>
-                                    @enderror
                                 </form>
                             </div>
                         </div>
