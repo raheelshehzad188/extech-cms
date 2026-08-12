@@ -19,11 +19,16 @@ class PlanSubscriptionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('plan_name')->label('Plan')->searchable()->sortable(),
-                TextColumn::make('plan_price')->label('One-Time Price')->sortable(),
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('email')->searchable()->copyable(),
-                TextColumn::make('phone')->toggleable(),
+                TextColumn::make('phone')->label('Contact')->searchable()->toggleable(),
+                TextColumn::make('whatsapp')->label('WhatsApp')->searchable()->toggleable(),
+                TextColumn::make('business_name')->label('Business')->searchable()->toggleable(),
+                TextColumn::make('website')->label('Website')->toggleable()->limit(30),
+                TextColumn::make('country')->searchable()->toggleable(),
+                TextColumn::make('address')->limit(40)->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('plan_name')->label('Plan')->searchable()->sortable(),
+                TextColumn::make('plan_price')->label('Plan Price')->sortable(),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -54,7 +59,7 @@ class PlanSubscriptionsTable
                         $record->markConfirmed();
 
                         Notification::make()
-                            ->title('Plan request confirmed')
+                            ->title('Request confirmed')
                             ->success()
                             ->send();
                     }),

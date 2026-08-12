@@ -25,12 +25,13 @@ class PlanSubscriptionResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationLabel = 'Plan Subscribe';
+    protected static ?string $navigationLabel = 'Requests';
 
-    protected static ?string $modelLabel = 'Plan Subscribe';
+    protected static ?string $modelLabel = 'Request';
 
-    protected static ?string $pluralModelLabel = 'Plan Subscribe';
+    protected static ?string $pluralModelLabel = 'Requests';
 
+    protected static ?string $slug = 'requests';
     public static function form(Schema $schema): Schema
     {
         return PlanSubscriptionForm::configure($schema);

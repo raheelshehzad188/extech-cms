@@ -16,7 +16,7 @@ class PlanSubscriptionForm
     {
         return $schema
             ->components([
-                Section::make('Package')
+                Section::make('Plan')
                     ->columns(2)
                     ->schema([
                         Select::make('pricing_plan_id')
@@ -25,7 +25,7 @@ class PlanSubscriptionForm
                             ->searchable()
                             ->nullable(),
                         TextInput::make('plan_name')->required()->maxLength(160),
-                        TextInput::make('plan_price')->label('One-Time Price')->maxLength(60),
+                        TextInput::make('plan_price')->label('Plan Price')->maxLength(80),
                         TextInput::make('payment_type')->default('one_time')->disabled()->dehydrated(),
                         Select::make('status')
                             ->options([
@@ -38,14 +38,18 @@ class PlanSubscriptionForm
                             ->default('pending'),
                         DateTimePicker::make('confirmed_at'),
                     ]),
-                Section::make('Customer')
+                Section::make('Client Request')
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')->required()->maxLength(120),
                         TextInput::make('email')->email()->required()->maxLength(190),
-                        TextInput::make('phone')->maxLength(40),
-                        TextInput::make('company')->maxLength(160),
-                        Textarea::make('message')->rows(4)->columnSpanFull(),
+                        TextInput::make('phone')->label('Contact')->required()->maxLength(40),
+                        TextInput::make('whatsapp')->label('WhatsApp')->maxLength(40),
+                        TextInput::make('business_name')->label('Business Name')->maxLength(160),
+                        TextInput::make('website')->label('Website')->maxLength(255),
+                        TextInput::make('country')->maxLength(120),
+                        Textarea::make('address')->rows(3)->columnSpanFull(),
+                        Textarea::make('message')->label('Notes')->rows(3)->columnSpanFull(),
                     ]),
             ]);
     }

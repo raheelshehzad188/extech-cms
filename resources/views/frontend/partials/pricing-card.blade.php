@@ -27,8 +27,8 @@
                 @endforeach
             </div>
             <div class="btn-wrapper">
-                <a href="{{ $plan->button_url ? url($plan->button_url) : route('plan.subscribe', $plan) }}" class="{{ $plan->buttonClass() }}">
-                    {{ $plan->button_text ?: 'Buy Now' }}
+                <a href="{{ route('plan.subscribe', $plan) }}" class="{{ $plan->buttonClass() }}">
+                    {{ $plan->button_text ?: 'Get Started Now' }}
                     <i class="fa-sharp fa-light fa-arrow-right-long"></i>
                 </a>
             </div>

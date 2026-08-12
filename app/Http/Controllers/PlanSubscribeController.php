@@ -9,7 +9,6 @@ use App\Models\PlanSubscription;
 use App\Models\PricingPlan;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class PlanSubscribeController extends Controller
@@ -22,7 +21,7 @@ class PlanSubscribeController extends Controller
 
         return view('frontend.pages.plan-subscribe', [
             'plan' => $plan,
-            'seo' => $this->pageSeo('plan-subscribe', 'Buy '.$plan->name),
+            'seo' => $this->pageSeo('plan-subscribe', 'Get Started — '.$plan->name),
         ]);
     }
 
@@ -35,20 +34,31 @@ class PlanSubscribeController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:120',
             'email' => 'required|email|max:190',
-            'phone' => 'nullable|string|max:40',
-            'company' => 'nullable|string|max:160',
+            'phone' => 'required|string|max:40',
+            'whatsapp' => 'required|string|max:40',
+            'business_name' => 'required|string|max:160',
+            'website' => 'nullable|string|max:255',
+            'country' => 'required|string|max:120',
+            'address' => 'required|string|max:2000',
             'message' => 'nullable|string|max:5000',
         ]);
+
+        $planPrice = trim($plan->displayPrice().' '.$plan->displaySuffix());
 
         $subscription = PlanSubscription::query()->create([
             'pricing_plan_id' => $plan->id,
             'plan_name' => $plan->name,
-            'plan_price' => $plan->displayPrice(),
+            'plan_price' => $planPrice,
             'payment_type' => 'one_time',
             'name' => $data['name'],
             'email' => strtolower(trim($data['email'])),
-            'phone' => $data['phone'] ?? null,
-            'company' => $data['company'] ?? null,
+            'phone' => $data['phone'],
+            'whatsapp' => $data['whatsapp'],
+            'company' => $data['business_name'],
+            'business_name' => $data['business_name'],
+            'website' => $data['website'] ?? null,
+            'country' => $data['country'],
+            'address' => $data['address'],
             'message' => $data['message'] ?? null,
             'status' => 'pending',
             'ip_address' => $request->ip(),
@@ -74,7 +84,7 @@ class PlanSubscribeController extends Controller
 
         return redirect()
             ->route('plan.subscribe', $plan)
-            ->with('success', 'Thank you! Your one-time package request for "'.$plan->name.'" has been sent. We will contact you shortly.');
+            ->with('success', 'Thank you! Your request for "'.$plan->name.'" ('.$planPrice.') has been submitted. We will contact you shortly.');
     }
 
     protected function pageSeo(string $slug, string $fallbackTitle)
