@@ -215,6 +215,28 @@
         .footer-location-info a:hover {
             color: var(--theme);
         }
+
+        .marketplace-filter .form-control,
+        .marketplace-filter .form-select {
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.18);
+            color: #fff;
+            min-height: 44px;
+        }
+        .marketplace-filter .form-control::placeholder {
+            color: rgba(255,255,255,.55);
+        }
+        .marketplace-filter option {
+            color: #111;
+        }
+        .marketplace-price-badge h3 {
+            font-size: 18px !important;
+            line-height: 1.15 !important;
+        }
+        .news-card-items .news-content p {
+            color: var(--text-color, #445375);
+            margin-top: 8px;
+        }
     </style>
 
     @if(!empty($seoModel->schema_markup))

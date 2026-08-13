@@ -55,6 +55,11 @@ class SystemPages
                 'breadcrumb_title' => 'Get A Quote',
                 'template' => 'default',
             ],
+            'marketplace' => [
+                'title' => 'Marketplace',
+                'breadcrumb_title' => 'Marketplace',
+                'template' => 'default',
+            ],
         ];
     }
 

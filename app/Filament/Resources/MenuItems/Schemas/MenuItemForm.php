@@ -43,6 +43,7 @@ class MenuItemForm
                                 'faq' => 'FAQs',
                                 'contact' => 'Contact',
                                 'quote' => 'Get A Quote',
+                                'marketplace.index' => 'Marketplace',
                             ])
                             ->searchable()
                             ->nullable()
