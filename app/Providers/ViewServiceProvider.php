@@ -48,10 +48,24 @@ class ViewServiceProvider extends ServiceProvider
                 // Table may not exist before migrate.
             }
 
+            $footerBottomMenu = collect();
+
+            try {
+                $footerBottomMenu = MenuItem::query()
+                    ->where('location', 'footer_bottom')
+                    ->whereNull('parent_id')
+                    ->where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            } catch (\Throwable) {
+                //
+            }
+
             $view->with([
                 'settings' => $settings,
                 'headerMenu' => $headerMenu,
                 'footerMenu' => $footerMenu,
+                'footerBottomMenu' => $footerBottomMenu,
                 'footerLocations' => $footerLocations,
             ]);
         });

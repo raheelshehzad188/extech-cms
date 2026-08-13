@@ -48,6 +48,16 @@ class MenuItem extends Model
         return '#';
     }
 
+    public static function locationLabel(?string $location): string
+    {
+        return match ($location) {
+            'header' => 'Header',
+            'footer' => 'Footer Quick Links',
+            'footer_bottom' => 'Footer Bottom Bar',
+            default => (string) $location,
+        };
+    }
+
     public static function ensureFooterDefaults(): void
     {
         if (static::query()->where('location', 'footer')->exists()) {
@@ -67,6 +77,26 @@ class MenuItem extends Model
                 'label' => $item['label'],
                 'route_name' => $item['route_name'],
                 'location' => 'footer',
+                'is_active' => true,
+                'sort_order' => $item['sort_order'],
+            ]);
+        }
+    }
+
+    public static function ensureFooterBottomDefaults(): void
+    {
+        if (static::query()->where('location', 'footer_bottom')->exists()) {
+            return;
+        }
+
+        foreach ([
+            ['label' => 'Terms & Condition', 'route_name' => 'contact', 'sort_order' => 1],
+            ['label' => 'Privacy Policy', 'route_name' => 'contact', 'sort_order' => 2],
+        ] as $item) {
+            static::query()->create([
+                'label' => $item['label'],
+                'route_name' => $item['route_name'],
+                'location' => 'footer_bottom',
                 'is_active' => true,
                 'sort_order' => $item['sort_order'],
             ]);

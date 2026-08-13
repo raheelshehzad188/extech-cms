@@ -26,8 +26,9 @@ class MenuItemForm
                             ->options([
                                 'header' => 'Header',
                                 'footer' => 'Footer Quick Links',
+                                'footer_bottom' => 'Footer Bottom Bar',
                             ])
-                            ->default('footer')
+                            ->default('footer_bottom')
                             ->required()
                             ->live(),
                         Select::make('route_name')

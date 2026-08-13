@@ -241,8 +241,12 @@
                 </div>
                 <div class="layout-link wow fadeInUp" data-wow-delay=".6s">
                     <div class="link-wrapper">
-                        <a href="{{ route('contact') }}">Terms &amp; Condition</a>
-                        <a href="{{ route('contact') }}">Privacy Policy</a>
+                        @forelse(($footerBottomMenu ?? collect()) as $item)
+                            <a href="{{ $item->href() }}">{{ $item->label }}</a>
+                        @empty
+                            <a href="{{ route('contact') }}">Terms &amp; Condition</a>
+                            <a href="{{ route('contact') }}">Privacy Policy</a>
+                        @endforelse
                     </div>
                 </div>
             </div>

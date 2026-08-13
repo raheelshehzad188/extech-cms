@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\MenuItems\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use App\Models\MenuItem;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -20,7 +20,7 @@ class MenuItemsTable
                 TextColumn::make('label')->searchable()->sortable(),
                 TextColumn::make('location')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => $state === 'footer' ? 'Footer Quick Links' : 'Header'),
+                    ->formatStateUsing(fn (?string $state): string => MenuItem::locationLabel($state)),
                 TextColumn::make('route_name')->label('Page')->toggleable(),
                 TextColumn::make('url')->limit(30)->toggleable(),
                 TextColumn::make('parent.label')->label('Parent')->toggleable(),
@@ -31,6 +31,7 @@ class MenuItemsTable
                 SelectFilter::make('location')->options([
                     'header' => 'Header',
                     'footer' => 'Footer Quick Links',
+                    'footer_bottom' => 'Footer Bottom Bar',
                 ]),
             ])
             ->defaultSort('sort_order')
