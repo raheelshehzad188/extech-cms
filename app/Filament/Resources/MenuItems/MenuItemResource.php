@@ -23,7 +23,11 @@ class MenuItemResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Website';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?string $navigationLabel = 'Menus';
+
+    protected static ?string $modelLabel = 'Menu Item';
+
+    protected static ?string $pluralModelLabel = 'Menus';
 
     public static function form(Schema $schema): Schema
     {

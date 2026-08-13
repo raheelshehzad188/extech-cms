@@ -71,11 +71,19 @@
                             <h3 class="widget_title">Quick Links</h3>
                             <div class="menu-all-pages-container">
                                 <ul class="menu">
-                                    <li><a href="{{ route('about') }}"><i class="fa-solid fa-chevrons-right"></i>{{ $settings->site_name }} About</a></li>
-                                    <li><a href="{{ route('services.index') }}"><i class="fa-solid fa-chevrons-right"></i>Our Services</a></li>
-                                    <li><a href="{{ route('blog.index') }}"><i class="fa-solid fa-chevrons-right"></i>Our Blogs</a></li>
-                                    <li><a href="{{ route('faq') }}"><i class="fa-solid fa-chevrons-right"></i>FAQ’S</a></li>
-                                    <li><a href="{{ route('contact') }}"><i class="fa-solid fa-chevrons-right"></i>Contact Us</a></li>
+                                    @forelse(($footerMenu ?? collect()) as $item)
+                                        <li>
+                                            <a href="{{ $item->href() }}">
+                                                <i class="fa-solid fa-chevrons-right"></i>{{ $item->label }}
+                                            </a>
+                                        </li>
+                                    @empty
+                                        <li><a href="{{ route('about') }}"><i class="fa-solid fa-chevrons-right"></i>About</a></li>
+                                        <li><a href="{{ route('services.index') }}"><i class="fa-solid fa-chevrons-right"></i>Our Services</a></li>
+                                        <li><a href="{{ route('blog.index') }}"><i class="fa-solid fa-chevrons-right"></i>Our Blogs</a></li>
+                                        <li><a href="{{ route('faq') }}"><i class="fa-solid fa-chevrons-right"></i>FAQ’S</a></li>
+                                        <li><a href="{{ route('contact') }}"><i class="fa-solid fa-chevrons-right"></i>Contact Us</a></li>
+                                    @endforelse
                                 </ul>
                             </div>
                         </div>
