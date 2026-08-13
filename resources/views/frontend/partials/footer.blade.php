@@ -175,6 +175,53 @@
         </div>
     </div>
 
+    @if(isset($footerLocations) && $footerLocations->count())
+        @php
+            $locationCount = $footerLocations->count();
+            $locationCol = match ($locationCount) {
+                1 => 'col-12',
+                2 => 'col-md-6',
+                3 => 'col-md-4',
+                default => 'col-sm-6 col-lg-3',
+            };
+        @endphp
+        <div class="footer-locations">
+            <div class="container">
+                <div class="footer-locations-head">
+                    <h3 class="footer-locations-title">{{ $settings->locations_heading ?: 'Locations' }}</h3>
+                    @if($settings->locations_watermark)
+                        <span class="footer-locations-watermark">{{ $settings->locations_watermark }}</span>
+                    @endif
+                </div>
+                <div class="row g-4">
+                    @foreach($footerLocations as $location)
+                        <div class="{{ $locationCol }}">
+                            <div class="footer-location-item">
+                                @if($location->flagUrl())
+                                    <div class="footer-location-flag">
+                                        <img src="{{ $location->flagUrl() }}" alt="{{ $location->country }}">
+                                    </div>
+                                @endif
+                                <div class="footer-location-info">
+                                    <h4>{{ $location->country }}</h4>
+                                    @if($location->address)
+                                        <p>{{ $location->address }}</p>
+                                    @endif
+                                    @if($location->phone)
+                                        <p><strong>P:</strong> <a href="tel:{{ preg_replace('/\s+/', '', $location->phone) }}">{{ $location->phone }}</a></p>
+                                    @endif
+                                    @if($location->email)
+                                        <p><a href="mailto:{{ $location->email }}">{{ $location->email }}</a></p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="copyright-wrap bg-theme">
         <div class="container">
             <div class="copyright-layout">

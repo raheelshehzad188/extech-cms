@@ -199,6 +199,13 @@ class ManageSiteSettings extends Page
                                         Textarea::make('offcanvas_text')->rows(3)->columnSpanFull(),
                                         Textarea::make('footer_about')->rows(3)->columnSpanFull(),
                                         TextInput::make('footer_copyright')->columnSpanFull(),
+                                        TextInput::make('locations_heading')
+                                            ->label('Locations Heading')
+                                            ->placeholder('Locations')
+                                            ->helperText('Footer locations section title. Manage offices from Website → Locations.'),
+                                        TextInput::make('locations_watermark')
+                                            ->label('Locations Watermark')
+                                            ->placeholder('SALES OFFICES'),
                                     ]),
                             ]),
                         Tab::make('Home 1 Content')

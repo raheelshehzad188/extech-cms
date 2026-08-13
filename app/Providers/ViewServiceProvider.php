@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Location;
 use App\Models\MenuItem;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\View;
@@ -26,9 +27,18 @@ class ViewServiceProvider extends ServiceProvider
                 ->orderBy('sort_order')
                 ->get();
 
+            $footerLocations = collect();
+
+            try {
+                $footerLocations = Location::query()->published()->take(Location::MAX_COUNT)->get();
+            } catch (\Throwable) {
+                // Table may not exist before migrate.
+            }
+
             $view->with([
                 'settings' => $settings,
                 'headerMenu' => $headerMenu,
+                'footerLocations' => $footerLocations,
             ]);
         });
     }

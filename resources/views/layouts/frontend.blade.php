@@ -135,6 +135,86 @@
                 display: block !important;
             }
         }
+
+        .footer-locations {
+            position: relative;
+            overflow: hidden;
+            padding: 40px 0 50px;
+            border-top: 1px solid rgba(255,255,255,.12);
+        }
+        .footer-locations-head {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 48px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,.12);
+        }
+        .footer-locations-title {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: #fff;
+            font-family: var(--title-font);
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .footer-locations-watermark {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-55%);
+            color: rgba(255,255,255,.08);
+            font-family: var(--title-font);
+            font-size: clamp(28px, 6vw, 64px);
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            pointer-events: none;
+            line-height: 1;
+        }
+        .footer-location-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .footer-location-flag {
+            flex: 0 0 48px;
+            width: 48px;
+            height: 32px;
+            overflow: hidden;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.25);
+        }
+        .footer-location-flag img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .footer-location-info h4 {
+            margin: 0 0 8px;
+            color: #fff;
+            font-family: var(--title-font);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .footer-location-info p,
+        .footer-location-info a {
+            margin: 0;
+            color: rgba(255,255,255,.72);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .footer-location-info a:hover {
+            color: var(--theme);
+        }
     </style>
 
     @if(!empty($seoModel->schema_markup))
