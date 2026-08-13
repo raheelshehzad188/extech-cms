@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\MenuItems\Tables;
 
 use App\Models\MenuItem;
+use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -28,12 +29,17 @@ class MenuItemsTable
                 TextColumn::make('sort_order')->sortable(),
             ])
             ->filters([
-                SelectFilter::make('location')->options([
-                    'header' => 'Header',
-                    'footer' => 'Footer Quick Links',
-                    'footer_bottom' => 'Footer Bottom Bar',
-                ]),
+                SelectFilter::make('location')
+                    ->label('Menu')
+                    ->options([
+                        'header' => 'Header',
+                        'footer' => 'Footer Quick Links',
+                        'footer_bottom' => 'Footer Bottom Bar',
+                    ])
+                    ->placeholder('All menus'),
             ])
+            ->filtersLayout(\Filament\Tables\Enums\FiltersLayout::AboveContent)
+            ->persistFiltersInSession()
             ->defaultSort('sort_order')
             ->reorderable('sort_order')
             ->recordActions([
